@@ -111,6 +111,38 @@ def health_check():
     return {"status": "ok"}
 
 
+@app.get("/api/debug/reset-admin")
+def reset_admin():
+    """임시: admin 비밀번호를 admin123으로 리셋 + test 유저 삭제"""
+    from app.database import SessionLocal
+    from app.models.user import User
+    from app.services.auth_service import hash_password
+    db = SessionLocal()
+    try:
+        # admin 비밀번호 리셋
+        admin = db.query(User).filter(User.email == "admin@yjt.com").first()
+        if admin:
+            admin.hashed_password = hash_password("admin123")
+            db.commit()
+            msg = "admin password reset to admin123"
+        else:
+            msg = "admin user not found"
+
+        # test 유저 삭제
+        test_user = db.query(User).filter(User.email == "test@test.com").first()
+        if test_user:
+            db.delete(test_user)
+            db.commit()
+            msg += " | test@test.com deleted"
+
+        return {"result": msg}
+    except Exception as e:
+        db.rollback()
+        return {"error": str(e)}
+    finally:
+        db.close()
+
+
 @app.get("/api/debug/db")
 def debug_db():
     """DB 연결 및 테이블 상태 확인 (디버깅용)"""
