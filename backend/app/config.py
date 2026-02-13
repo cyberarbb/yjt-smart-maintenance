@@ -7,10 +7,9 @@ from dotenv import load_dotenv
 # .env 파일 절대 경로 (backend/ 디렉토리 기준)
 _ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
 
-# ✅ .env 파일을 OS 환경변수에 직접 로드 (override=True로 빈 값 덮어쓰기)
-# pydantic-settings는 OS 환경변수 > .env 파일 우선이므로,
-# OS에 빈 값이 있으면 .env 값이 무시됨 → load_dotenv로 먼저 세팅
-load_dotenv(_ENV_FILE, override=True)
+# ✅ .env 파일이 있으면 로드 (Render에서는 .env 없이 환경변수 직접 사용)
+if _ENV_FILE.exists():
+    load_dotenv(_ENV_FILE, override=True)
 
 
 class Settings(BaseSettings):
@@ -46,7 +45,11 @@ class Settings(BaseSettings):
     uvicorn_timeout_notify: int = 30   # graceful shutdown 대기 시간
     uvicorn_workers: int = 1           # 개발 환경 1, 프로덕션 환경 2~4
 
-    model_config = {"env_file": str(_ENV_FILE), "env_file_encoding": "utf-8", "extra": "ignore"}
+    model_config = {
+        "env_file": str(_ENV_FILE) if _ENV_FILE.exists() else None,
+        "env_file_encoding": "utf-8",
+        "extra": "ignore",
+    }
 
 
 @lru_cache()

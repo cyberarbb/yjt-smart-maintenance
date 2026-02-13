@@ -14,16 +14,26 @@ settings = get_settings()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # ▶ Startup
-    from app.models.notification import Notification  # noqa: F401 - 테이블 생성
-    from app.models.vessel import Vessel  # noqa: F401 - 테이블 생성
-    from app.models.equipment import Equipment  # noqa: F401 - 테이블 생성
-    from app.models.running_hours import RunningHours  # noqa: F401 - 테이블 생성
-    from app.models.maintenance_plan import MaintenancePlan  # noqa: F401
-    from app.models.work_order import WorkOrder  # noqa: F401
-    from app.models.activity_log import ActivityLog  # noqa: F401
-    Base.metadata.create_all(bind=engine)
-    from app.seed.seed_data import seed_database
-    seed_database()
+    try:
+        from app.models.notification import Notification  # noqa: F401
+        from app.models.vessel import Vessel  # noqa: F401
+        from app.models.equipment import Equipment  # noqa: F401
+        from app.models.running_hours import RunningHours  # noqa: F401
+        from app.models.maintenance_plan import MaintenancePlan  # noqa: F401
+        from app.models.work_order import WorkOrder  # noqa: F401
+        from app.models.activity_log import ActivityLog  # noqa: F401
+        Base.metadata.create_all(bind=engine)
+        logger.info("✅ DB tables created")
+    except Exception as e:
+        logger.error(f"❌ DB table creation failed: {e}")
+
+    try:
+        from app.seed.seed_data import seed_database
+        seed_database()
+        logger.info("✅ Seed data loaded")
+    except Exception as e:
+        logger.error(f"⚠️ Seed data error (non-critical): {e}")
+
     logger.info("✅ Application started - DB ready")
     yield
     # ▶ Shutdown: 모든 DB 커넥션 정리 (CLOSE_WAIT 방지 핵심)
