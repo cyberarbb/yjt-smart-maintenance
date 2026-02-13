@@ -239,34 +239,6 @@ def get_vessel_pms_context(db: Session, query: str) -> str:
     return "\n".join(context_parts) if context_parts else ""
 
 
-
-    """주문 관련 컨텍스트"""
-    orders = (
-        db.query(ServiceOrder)
-        .filter(
-            or_(
-                ServiceOrder.vessel_name.ilike(f"%{query}%"),
-                ServiceOrder.turbo_model.ilike(f"%{query}%"),
-                ServiceOrder.turbo_brand.ilike(f"%{query}%"),
-                ServiceOrder.description.ilike(f"%{query}%"),
-            )
-        )
-        .limit(5)
-        .all()
-    )
-    if not orders:
-        return ""
-
-    lines = ["## 📋 관련 서비스 주문 (DB 조회 결과)"]
-    for o in orders:
-        lines.append(
-            f"- [{o.status}] {o.order_type} | {o.turbo_brand} {o.turbo_model}"
-            f"{' | 선박: ' + o.vessel_name if o.vessel_name else ''}"
-            f"\n  내용: {o.description or 'N/A'}"
-        )
-    return "\n".join(lines)
-
-
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 메인 챗봇 함수
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

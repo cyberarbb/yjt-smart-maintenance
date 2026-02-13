@@ -7,26 +7,31 @@ settings = get_settings()
 
 connect_args = {}
 pool_config = {}
+db_url = settings.database_url
 
-if settings.database_url.startswith("sqlite"):
+if db_url.startswith("sqlite"):
     # SQLite: 단일 커넥션, StaticPool 사용 (CLOSE_WAIT 발생 없음)
     connect_args = {"check_same_thread": False}
     pool_config = {
         "poolclass": StaticPool,
     }
 else:
-    # PostgreSQL 등: QueuePool + 커넥션 재활용 설정
+    # Render PostgreSQL: postgres:// → postgresql:// 변환 (SQLAlchemy 2.0+ 필수)
+    if db_url.startswith("postgres://"):
+        db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+    # PostgreSQL: QueuePool + 커넥션 재활용 설정 (Render 무료 플랜 최적화)
     pool_config = {
         "poolclass": QueuePool,
-        "pool_size": 10,           # 기본 커넥션 풀 크기
-        "max_overflow": 20,        # 초과 허용 커넥션 수
+        "pool_size": 3,            # Render 무료 플랜: 작은 풀
+        "max_overflow": 5,         # 초과 허용 커넥션 수
         "pool_pre_ping": True,     # 사용 전 커넥션 유효성 검사 (끊어진 커넥션 자동 제거)
-        "pool_recycle": 1800,      # 30분마다 커넥션 재생성 (CLOSE_WAIT 방지 핵심)
+        "pool_recycle": 300,       # 5분마다 커넥션 재생성 (Render 무료 DB 안정성)
         "pool_timeout": 30,        # 풀에서 커넥션 대기 최대 시간
     }
 
 engine = create_engine(
-    settings.database_url,
+    db_url,
     connect_args=connect_args,
     **pool_config,
 )
