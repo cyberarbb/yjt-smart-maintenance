@@ -127,6 +127,96 @@ TRANSLATIONS = {
         "hi": "YJT रखरखाव प्लेटफ़ॉर्म से जुड़ें", "fr": "Rejoignez la plateforme YJT",
     },
 
+    # ── 비밀번호 찾기 (Forgot Password) ──
+    "forgot_password": {
+        "ko": "비밀번호를 잊으셨나요?", "en": "Forgot password?", "zh": "忘记密码？", "ja": "パスワードをお忘れですか？",
+        "ar": "نسيت كلمة المرور؟", "es": "¿Olvidó su contraseña?", "hi": "पासवर्ड भूल गए?", "fr": "Mot de passe oublié ?",
+    },
+    "forgot_password_subtitle": {
+        "ko": "이메일 주소를 입력하면 인증 코드를 보내드립니다", "en": "Enter your email and we'll send you a verification code",
+        "zh": "输入您的电子邮箱，我们将发送验证码", "ja": "メールアドレスを入力すると認証コードをお送りします",
+        "ar": "أدخل بريدك الإلكتروني وسنرسل لك رمز التحقق", "es": "Ingrese su correo y le enviaremos un código de verificación",
+        "hi": "अपना ईमेल दर्ज करें और हम आपको सत्यापन कोड भेजेंगे", "fr": "Entrez votre e-mail et nous vous enverrons un code de vérification",
+    },
+    "send_code": {
+        "ko": "인증 코드 발송", "en": "Send Code", "zh": "发送验证码", "ja": "認証コード送信",
+        "ar": "إرسال الرمز", "es": "Enviar código", "hi": "कोड भेजें", "fr": "Envoyer le code",
+    },
+    "verification_code": {
+        "ko": "인증 코드", "en": "Verification Code", "zh": "验证码", "ja": "認証コード",
+        "ar": "رمز التحقق", "es": "Código de verificación", "hi": "सत्यापन कोड", "fr": "Code de vérification",
+    },
+    "new_password": {
+        "ko": "새 비밀번호", "en": "New Password", "zh": "新密码", "ja": "新しいパスワード",
+        "ar": "كلمة المرور الجديدة", "es": "Nueva contraseña", "hi": "नया पासवर्ड", "fr": "Nouveau mot de passe",
+    },
+    "confirm_password": {
+        "ko": "비밀번호 확인", "en": "Confirm Password", "zh": "确认密码", "ja": "パスワード確認",
+        "ar": "تأكيد كلمة المرور", "es": "Confirmar contraseña", "hi": "पासवर्ड की पुष्टि", "fr": "Confirmer le mot de passe",
+    },
+    "reset_password": {
+        "ko": "비밀번호 변경", "en": "Reset Password", "zh": "重置密码", "ja": "パスワードリセット",
+        "ar": "إعادة تعيين كلمة المرور", "es": "Restablecer contraseña", "hi": "पासवर्ड रीसेट", "fr": "Réinitialiser le mot de passe",
+    },
+    "code_sent": {
+        "ko": "인증 코드가 이메일로 발송되었습니다", "en": "Verification code sent to your email", "zh": "验证码已发送到您的邮箱", "ja": "認証コードをメールに送信しました",
+        "ar": "تم إرسال رمز التحقق إلى بريدك الإلكتروني", "es": "Código de verificación enviado a su correo", "hi": "सत्यापन कोड आपके ईमेल पर भेजा गया", "fr": "Code de vérification envoyé à votre e-mail",
+    },
+    "password_reset_success": {
+        "ko": "비밀번호가 성공적으로 변경되었습니다", "en": "Password has been reset successfully", "zh": "密码已成功重置", "ja": "パスワードが正常にリセットされました",
+        "ar": "تم إعادة تعيين كلمة المرور بنجاح", "es": "La contraseña se ha restablecido correctamente", "hi": "पासवर्ड सफलतापूर्वक रीसेट किया गया", "fr": "Le mot de passe a été réinitialisé avec succès",
+    },
+    "back_to_login": {
+        "ko": "로그인으로 돌아가기", "en": "Back to Login", "zh": "返回登录", "ja": "ログインに戻る",
+        "ar": "العودة إلى تسجيل الدخول", "es": "Volver al inicio de sesión", "hi": "लॉगिन पर वापस जाएं", "fr": "Retour à la connexion",
+    },
+    "password_mismatch": {
+        "ko": "비밀번호가 일치하지 않습니다", "en": "Passwords do not match", "zh": "密码不匹配", "ja": "パスワードが一致しません",
+        "ar": "كلمات المرور غير متطابقة", "es": "Las contraseñas no coinciden", "hi": "पासवर्ड मेल नहीं खाते", "fr": "Les mots de passe ne correspondent pas",
+    },
+    "verify": {
+        "ko": "확인", "en": "Verify", "zh": "验证", "ja": "確認",
+        "ar": "تحقق", "es": "Verificar", "hi": "सत्यापित करें", "fr": "Vérifier",
+    },
+    "resend_code": {
+        "ko": "코드 재발송", "en": "Resend Code", "zh": "重新发送", "ja": "再送信",
+        "ar": "إعادة إرسال", "es": "Reenviar", "hi": "दोबारा भेजें", "fr": "Renvoyer",
+    },
+
+    # ── 프로필 / 비밀번호 변경 (Profile / Change Password) ──
+    "my_profile": {
+        "ko": "내 프로필", "en": "My Profile", "zh": "我的资料", "ja": "マイプロフィール",
+        "ar": "ملفي الشخصي", "es": "Mi Perfil", "hi": "मेरा प्रोफ़ाइल", "fr": "Mon Profil",
+    },
+    "edit_profile": {
+        "ko": "프로필 수정", "en": "Edit Profile", "zh": "编辑资料", "ja": "プロフィール編集",
+        "ar": "تعديل الملف الشخصي", "es": "Editar Perfil", "hi": "प्रोफ़ाइल संपादित करें", "fr": "Modifier le Profil",
+    },
+    "change_password": {
+        "ko": "비밀번호 변경", "en": "Change Password", "zh": "更改密码", "ja": "パスワード変更",
+        "ar": "تغيير كلمة المرور", "es": "Cambiar Contraseña", "hi": "पासवर्ड बदलें", "fr": "Changer le mot de passe",
+    },
+    "current_password": {
+        "ko": "현재 비밀번호", "en": "Current Password", "zh": "当前密码", "ja": "現在のパスワード",
+        "ar": "كلمة المرور الحالية", "es": "Contraseña Actual", "hi": "वर्तमान पासवर्ड", "fr": "Mot de passe actuel",
+    },
+    "password_changed": {
+        "ko": "비밀번호가 변경되었습니다", "en": "Password changed successfully", "zh": "密码已更改", "ja": "パスワードが変更されました",
+        "ar": "تم تغيير كلمة المرور بنجاح", "es": "Contraseña cambiada correctamente", "hi": "पासवर्ड सफलतापूर्वक बदला गया", "fr": "Mot de passe modifié avec succès",
+    },
+    "save": {
+        "ko": "저장", "en": "Save", "zh": "保存", "ja": "保存",
+        "ar": "حفظ", "es": "Guardar", "hi": "सहेजें", "fr": "Enregistrer",
+    },
+    "cancel": {
+        "ko": "취소", "en": "Cancel", "zh": "取消", "ja": "キャンセル",
+        "ar": "إلغاء", "es": "Cancelar", "hi": "रद्द करें", "fr": "Annuler",
+    },
+    "profile_updated": {
+        "ko": "프로필이 업데이트되었습니다", "en": "Profile updated successfully", "zh": "资料已更新", "ja": "プロフィールが更新されました",
+        "ar": "تم تحديث الملف الشخصي بنجاح", "es": "Perfil actualizado correctamente", "hi": "प्रोफ़ाइल सफलतापूर्वक अपडेट किया गया", "fr": "Profil mis à jour avec succès",
+    },
+
     # ── 대시보드 (Dashboard) ──
     "total_parts": {
         "ko": "총 부품 수", "en": "Total Parts", "zh": "零件总数", "ja": "総部品数",
@@ -365,6 +455,480 @@ TRANSLATIONS = {
         "es": "No mostrar de nuevo",
         "hi": "दोबारा न दिखाएं",
         "fr": "Ne plus afficher",
+    },
+
+    # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    # Phase 2 추가 번역 키
+    # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    # ── 사이드바 확장 (Sidebar - Phase 2) ──
+    "nav_customers": {
+        "ko": "고객 관리", "en": "Customers", "zh": "客户管理", "ja": "顧客管理",
+        "ar": "إدارة العملاء", "es": "Clientes", "hi": "ग्राहक प्रबंधन", "fr": "Clients",
+    },
+    "nav_analytics": {
+        "ko": "분석", "en": "Analytics", "zh": "数据分析", "ja": "分析",
+        "ar": "التحليلات", "es": "Analíticas", "hi": "विश्लेषिकी", "fr": "Analytique",
+    },
+    "nav_users": {
+        "ko": "사용자 관리", "en": "User Management", "zh": "用户管理", "ja": "ユーザー管理",
+        "ar": "إدارة المستخدمين", "es": "Gestión de Usuarios", "hi": "उपयोगकर्ता प्रबंधन", "fr": "Gestion des Utilisateurs",
+    },
+    "nav_my_orders": {
+        "ko": "내 주문", "en": "My Orders", "zh": "我的订单", "ja": "マイオーダー",
+        "ar": "طلباتي", "es": "Mis Pedidos", "hi": "मेरे ऑर्डर", "fr": "Mes Commandes",
+    },
+    "nav_notifications": {
+        "ko": "알림", "en": "Notifications", "zh": "通知", "ja": "通知",
+        "ar": "الإشعارات", "es": "Notificaciones", "hi": "सूचनाएं", "fr": "Notifications",
+    },
+
+    # ── 관리자 (Admin) ──
+    "admin_badge": {
+        "ko": "관리자", "en": "Admin", "zh": "管理员", "ja": "管理者",
+        "ar": "مسؤول", "es": "Administrador", "hi": "व्यवस्थापक", "fr": "Administrateur",
+    },
+    "admin_only": {
+        "ko": "관리자 전용 페이지입니다", "en": "This page is for administrators only",
+        "zh": "此页面仅供管理员使用", "ja": "このページは管理者専用です",
+        "ar": "هذه الصفحة مخصصة للمسؤولين فقط", "es": "Esta página es solo para administradores",
+        "hi": "यह पृष्ठ केवल व्यवस्थापकों के लिए है", "fr": "Cette page est réservée aux administrateurs",
+    },
+
+    # ── CRUD 공통 ──
+    "add": {
+        "ko": "추가", "en": "Add", "zh": "添加", "ja": "追加",
+        "ar": "إضافة", "es": "Agregar", "hi": "जोड़ें", "fr": "Ajouter",
+    },
+    "edit": {
+        "ko": "수정", "en": "Edit", "zh": "编辑", "ja": "編集",
+        "ar": "تعديل", "es": "Editar", "hi": "संपादित", "fr": "Modifier",
+    },
+    "delete": {
+        "ko": "삭제", "en": "Delete", "zh": "删除", "ja": "削除",
+        "ar": "حذف", "es": "Eliminar", "hi": "हटाएं", "fr": "Supprimer",
+    },
+    "save": {
+        "ko": "저장", "en": "Save", "zh": "保存", "ja": "保存",
+        "ar": "حفظ", "es": "Guardar", "hi": "सहेजें", "fr": "Enregistrer",
+    },
+    "cancel": {
+        "ko": "취소", "en": "Cancel", "zh": "取消", "ja": "キャンセル",
+        "ar": "إلغاء", "es": "Cancelar", "hi": "रद्द करें", "fr": "Annuler",
+    },
+    "create": {
+        "ko": "생성", "en": "Create", "zh": "创建", "ja": "作成",
+        "ar": "إنشاء", "es": "Crear", "hi": "बनाएं", "fr": "Créer",
+    },
+    "update": {
+        "ko": "업데이트", "en": "Update", "zh": "更新", "ja": "更新",
+        "ar": "تحديث", "es": "Actualizar", "hi": "अपडेट करें", "fr": "Mettre à jour",
+    },
+    "actions": {
+        "ko": "작업", "en": "Actions", "zh": "操作", "ja": "操作",
+        "ar": "إجراءات", "es": "Acciones", "hi": "कार्यवाही", "fr": "Actions",
+    },
+    "search": {
+        "ko": "검색", "en": "Search", "zh": "搜索", "ja": "検索",
+        "ar": "بحث", "es": "Buscar", "hi": "खोजें", "fr": "Rechercher",
+    },
+    "total": {
+        "ko": "총", "en": "Total", "zh": "总计", "ja": "合計",
+        "ar": "الإجمالي", "es": "Total", "hi": "कुल", "fr": "Total",
+    },
+    "no_data": {
+        "ko": "데이터가 없습니다", "en": "No data found", "zh": "未找到数据", "ja": "データが見つかりません",
+        "ar": "لم يتم العثور على بيانات", "es": "No se encontraron datos", "hi": "कोई डेटा नहीं मिला", "fr": "Aucune donnée trouvée",
+    },
+    "loading": {
+        "ko": "로딩 중...", "en": "Loading...", "zh": "加载中...", "ja": "読み込み中...",
+        "ar": "جاري التحميل...", "es": "Cargando...", "hi": "लोड हो रहा है...", "fr": "Chargement...",
+    },
+
+    # ── 부품 (Parts - CRUD) ──
+    "add_part": {
+        "ko": "부품 추가", "en": "Add Part", "zh": "添加零件", "ja": "部品追加",
+        "ar": "إضافة قطعة", "es": "Agregar Pieza", "hi": "पार्ट जोड़ें", "fr": "Ajouter une Pièce",
+    },
+    "edit_part": {
+        "ko": "부품 수정", "en": "Edit Part", "zh": "编辑零件", "ja": "部品編集",
+        "ar": "تعديل القطعة", "es": "Editar Pieza", "hi": "पार्ट संपादित करें", "fr": "Modifier la Pièce",
+    },
+    "adjust_stock": {
+        "ko": "재고 조정", "en": "Adjust Stock", "zh": "调整库存", "ja": "在庫調整",
+        "ar": "تعديل المخزون", "es": "Ajustar Stock", "hi": "स्टॉक समायोजित करें", "fr": "Ajuster le Stock",
+    },
+
+    # ── 주문 (Orders - CRUD) ──
+    "create_order": {
+        "ko": "주문 생성", "en": "Create Order", "zh": "创建订单", "ja": "注文作成",
+        "ar": "إنشاء طلب", "es": "Crear Pedido", "hi": "ऑर्डर बनाएं", "fr": "Créer une Commande",
+    },
+    "edit_order": {
+        "ko": "주문 수정", "en": "Edit Order", "zh": "编辑订单", "ja": "注文編集",
+        "ar": "تعديل الطلب", "es": "Editar Pedido", "hi": "ऑर्डर संपादित करें", "fr": "Modifier la Commande",
+    },
+    "order_type": {
+        "ko": "주문 유형", "en": "Order Type", "zh": "订单类型", "ja": "注文タイプ",
+        "ar": "نوع الطلب", "es": "Tipo de Pedido", "hi": "ऑर्डर प्रकार", "fr": "Type de Commande",
+    },
+    "vessel_name": {
+        "ko": "선박명", "en": "Vessel Name", "zh": "船舶名称", "ja": "船名",
+        "ar": "اسم السفينة", "es": "Nombre del Buque", "hi": "जहाज का नाम", "fr": "Nom du Navire",
+    },
+
+    # ── 고객 (Customers) ──
+    "customer_management": {
+        "ko": "고객 관리", "en": "Customer Management", "zh": "客户管理", "ja": "顧客管理",
+        "ar": "إدارة العملاء", "es": "Gestión de Clientes", "hi": "ग्राहक प्रबंधन", "fr": "Gestion des Clients",
+    },
+    "add_customer": {
+        "ko": "고객 추가", "en": "Add Customer", "zh": "添加客户", "ja": "顧客追加",
+        "ar": "إضافة عميل", "es": "Agregar Cliente", "hi": "ग्राहक जोड़ें", "fr": "Ajouter un Client",
+    },
+    "company_name": {
+        "ko": "회사명", "en": "Company Name", "zh": "公司名称", "ja": "会社名",
+        "ar": "اسم الشركة", "es": "Nombre de Empresa", "hi": "कंपनी का नाम", "fr": "Nom de l'Entreprise",
+    },
+    "contact_name": {
+        "ko": "담당자명", "en": "Contact Name", "zh": "联系人", "ja": "担当者名",
+        "ar": "اسم جهة الاتصال", "es": "Nombre de Contacto", "hi": "संपर्क नाम", "fr": "Nom du Contact",
+    },
+    "vessel_type": {
+        "ko": "선박 유형", "en": "Vessel Type", "zh": "船舶类型", "ja": "船種",
+        "ar": "نوع السفينة", "es": "Tipo de Buque", "hi": "जहाज प्रकार", "fr": "Type de Navire",
+    },
+
+    # ── 문의 (Inquiries) ──
+    "my_inquiries": {
+        "ko": "내 문의", "en": "My Inquiries", "zh": "我的咨询", "ja": "お問い合わせ",
+        "ar": "استفساراتي", "es": "Mis Consultas", "hi": "मेरी पूछताछ", "fr": "Mes Demandes",
+    },
+    "new_inquiry": {
+        "ko": "새 문의", "en": "New Inquiry", "zh": "新咨询", "ja": "新規お問い合わせ",
+        "ar": "استفسار جديد", "es": "Nueva Consulta", "hi": "नई पूछताछ", "fr": "Nouvelle Demande",
+    },
+    "respond": {
+        "ko": "응답", "en": "Respond", "zh": "回复", "ja": "回答",
+        "ar": "الرد", "es": "Responder", "hi": "जवाब दें", "fr": "Répondre",
+    },
+    "resolved": {
+        "ko": "해결됨", "en": "Resolved", "zh": "已解决", "ja": "解決済み",
+        "ar": "تم الحل", "es": "Resuelto", "hi": "हल किया गया", "fr": "Résolu",
+    },
+    "unresolved": {
+        "ko": "미해결", "en": "Unresolved", "zh": "未解决", "ja": "未解決",
+        "ar": "لم يتم الحل", "es": "Sin Resolver", "hi": "अनसुलझा", "fr": "Non Résolu",
+    },
+
+    # ── 알림 (Notifications) ──
+    "notifications": {
+        "ko": "알림", "en": "Notifications", "zh": "通知", "ja": "通知",
+        "ar": "الإشعارات", "es": "Notificaciones", "hi": "सूचनाएं", "fr": "Notifications",
+    },
+    "mark_all_read": {
+        "ko": "모두 읽음", "en": "Mark All Read", "zh": "全部已读", "ja": "すべて既読にする",
+        "ar": "تعليم الكل كمقروء", "es": "Marcar Todo como Leído", "hi": "सभी पढ़ा हुआ चिह्नित करें", "fr": "Tout Marquer comme Lu",
+    },
+    "no_notifications": {
+        "ko": "알림이 없습니다", "en": "No notifications", "zh": "没有通知", "ja": "通知はありません",
+        "ar": "لا توجد إشعارات", "es": "Sin notificaciones", "hi": "कोई सूचना नहीं", "fr": "Aucune notification",
+    },
+    "view_all_notifications": {
+        "ko": "모든 알림 보기", "en": "View all notifications", "zh": "查看所有通知", "ja": "すべての通知を見る",
+        "ar": "عرض جميع الإشعارات", "es": "Ver todas las notificaciones", "hi": "सभी सूचनाएं देखें", "fr": "Voir toutes les notifications",
+    },
+
+    # ── 분석 (Analytics) ──
+    "analytics_dashboard": {
+        "ko": "분석 대시보드", "en": "Analytics Dashboard", "zh": "分析仪表盘", "ja": "分析ダッシュボード",
+        "ar": "لوحة التحليلات", "es": "Panel de Analíticas", "hi": "विश्लेषिकी डैशबोर्ड", "fr": "Tableau de Bord Analytique",
+    },
+    "inventory_by_brand": {
+        "ko": "브랜드별 재고", "en": "Inventory by Brand", "zh": "品牌库存", "ja": "ブランド別在庫",
+        "ar": "المخزون حسب العلامة", "es": "Inventario por Marca", "hi": "ब्रांड अनुसार इन्वेंटरी", "fr": "Inventaire par Marque",
+    },
+    "order_status_dist": {
+        "ko": "주문 상태 분포", "en": "Order Status Distribution", "zh": "订单状态分布", "ja": "注文状態分布",
+        "ar": "توزيع حالة الطلبات", "es": "Distribución de Estado de Pedidos", "hi": "ऑर्डर स्थिति वितरण", "fr": "Distribution des Statuts de Commandes",
+    },
+    "monthly_orders_trend": {
+        "ko": "월별 주문 추이", "en": "Monthly Orders Trend", "zh": "月度订单趋势", "ja": "月別注文推移",
+        "ar": "اتجاه الطلبات الشهرية", "es": "Tendencia de Pedidos Mensuales", "hi": "मासिक ऑर्डर प्रवृत्ति", "fr": "Tendance des Commandes Mensuelles",
+    },
+    "inventory_value": {
+        "ko": "재고 가치", "en": "Inventory Value", "zh": "库存价值", "ja": "在庫価値",
+        "ar": "قيمة المخزون", "es": "Valor del Inventario", "hi": "इन्वेंटरी मूल्य", "fr": "Valeur du Stock",
+    },
+    "low_stock_summary": {
+        "ko": "저재고 요약", "en": "Low Stock Summary", "zh": "低库存摘要", "ja": "在庫不足サマリー",
+        "ar": "ملخص المخزون المنخفض", "es": "Resumen de Stock Bajo", "hi": "कम स्टॉक सारांश", "fr": "Résumé du Stock Faible",
+    },
+    "export_report": {
+        "ko": "리포트 내보내기", "en": "Export Report", "zh": "导出报告", "ja": "レポート出力",
+        "ar": "تصدير التقرير", "es": "Exportar Informe", "hi": "रिपोर्ट निर्यात", "fr": "Exporter le Rapport",
+    },
+
+    # ── 사용자 관리 (User Management) ──
+    "user_management": {
+        "ko": "사용자 관리", "en": "User Management", "zh": "用户管理", "ja": "ユーザー管理",
+        "ar": "إدارة المستخدمين", "es": "Gestión de Usuarios", "hi": "उपयोगकर्ता प्रबंधन", "fr": "Gestion des Utilisateurs",
+    },
+    "toggle_admin": {
+        "ko": "관리자 전환", "en": "Toggle Admin", "zh": "切换管理员", "ja": "管理者切替",
+        "ar": "تبديل المسؤول", "es": "Alternar Admin", "hi": "व्यवस्थापक टॉगल", "fr": "Basculer Admin",
+    },
+    "role": {
+        "ko": "역할", "en": "Role", "zh": "角色", "ja": "ロール",
+        "ar": "الدور", "es": "Rol", "hi": "भूमिका", "fr": "Rôle",
+    },
+    "customer_role": {
+        "ko": "고객", "en": "Customer", "zh": "客户", "ja": "顧客",
+        "ar": "عميل", "es": "Cliente", "hi": "ग्राहक", "fr": "Client",
+    },
+
+    # ── 고객 대시보드 (Customer Dashboard) ──
+    "quick_actions": {
+        "ko": "빠른 액션", "en": "Quick Actions", "zh": "快速操作", "ja": "クイックアクション",
+        "ar": "إجراءات سريعة", "es": "Acciones Rápidas", "hi": "त्वरित कार्यवाही", "fr": "Actions Rapides",
+    },
+    "ask_ai": {
+        "ko": "AI에게 질문하기", "en": "Ask AI Assistant", "zh": "向AI提问", "ja": "AIに質問する",
+        "ar": "اسأل المساعد الذكي", "es": "Preguntar al Asistente IA", "hi": "AI सहायक से पूछें", "fr": "Demander à l'Assistant IA",
+    },
+    "view_my_orders": {
+        "ko": "내 주문 보기", "en": "View My Orders", "zh": "查看我的订单", "ja": "マイオーダーを見る",
+        "ar": "عرض طلباتي", "es": "Ver Mis Pedidos", "hi": "मेरे ऑर्डर देखें", "fr": "Voir Mes Commandes",
+    },
+    "submit_inquiry": {
+        "ko": "문의하기", "en": "Submit Inquiry", "zh": "提交咨询", "ja": "お問い合わせを送信",
+        "ar": "إرسال استفسار", "es": "Enviar Consulta", "hi": "पूछताछ सबमिट करें", "fr": "Soumettre une Demande",
+    },
+    "recent_orders": {
+        "ko": "최근 주문", "en": "Recent Orders", "zh": "最近订单", "ja": "最近の注文",
+        "ar": "الطلبات الأخيرة", "es": "Pedidos Recientes", "hi": "हालिया ऑर्डर", "fr": "Commandes Récentes",
+    },
+    "recent_inquiries": {
+        "ko": "최근 문의", "en": "Recent Inquiries", "zh": "最近咨询", "ja": "最近のお問い合わせ",
+        "ar": "الاستفسارات الأخيرة", "es": "Consultas Recientes", "hi": "हालिया पूछताछ", "fr": "Demandes Récentes",
+    },
+
+    # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    # Phase 3 - 선박/장비/PMS/운전시간 번역 키
+    # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    # ── 선박 (Vessels) ──
+    "nav_vessels": {
+        "ko": "선박 관리", "en": "Vessels", "zh": "船舶管理", "ja": "船舶管理",
+        "ar": "إدارة السفن", "es": "Buques", "hi": "जहाज प्रबंधन", "fr": "Navires",
+    },
+    "vessels": {
+        "ko": "선박", "en": "Vessels", "zh": "船舶", "ja": "船舶",
+        "ar": "السفن", "es": "Buques", "hi": "जहाज", "fr": "Navires",
+    },
+    "add_vessel": {
+        "ko": "선박 추가", "en": "Add Vessel", "zh": "添加船舶", "ja": "船舶追加",
+        "ar": "إضافة سفينة", "es": "Agregar Buque", "hi": "जहाज जोड़ें", "fr": "Ajouter un Navire",
+    },
+    "imo_number": {
+        "ko": "IMO 번호", "en": "IMO Number", "zh": "IMO编号", "ja": "IMO番号",
+        "ar": "رقم IMO", "es": "Número IMO", "hi": "IMO नंबर", "fr": "Numéro IMO",
+    },
+    "class_society": {
+        "ko": "선급", "en": "Class Society", "zh": "船级社", "ja": "船級",
+        "ar": "جمعية التصنيف", "es": "Sociedad de Clasificación", "hi": "वर्ग समाज", "fr": "Société de Classification",
+    },
+    "flag": {
+        "ko": "선적항", "en": "Flag", "zh": "船旗", "ja": "旗国",
+        "ar": "العلم", "es": "Bandera", "hi": "ध्वज", "fr": "Pavillon",
+    },
+    "owner": {
+        "ko": "선주", "en": "Owner", "zh": "船东", "ja": "船主",
+        "ar": "المالك", "es": "Propietario", "hi": "मालिक", "fr": "Propriétaire",
+    },
+    "manager": {
+        "ko": "관리 회사", "en": "Manager", "zh": "管理公司", "ja": "管理会社",
+        "ar": "المدير", "es": "Administrador", "hi": "प्रबंधक", "fr": "Gestionnaire",
+    },
+
+    # ── 장비 (Equipment) ──
+    "nav_equipment": {
+        "ko": "장비 관리", "en": "Equipment", "zh": "设备管理", "ja": "機器管理",
+        "ar": "إدارة المعدات", "es": "Equipos", "hi": "उपकरण प्रबंधन", "fr": "Équipements",
+    },
+    "equipment": {
+        "ko": "장비", "en": "Equipment", "zh": "设备", "ja": "機器",
+        "ar": "المعدات", "es": "Equipo", "hi": "उपकरण", "fr": "Équipement",
+    },
+    "equipment_tree": {
+        "ko": "장비 트리", "en": "Equipment Tree", "zh": "设备树", "ja": "機器ツリー",
+        "ar": "شجرة المعدات", "es": "Árbol de Equipos", "hi": "उपकरण वृक्ष", "fr": "Arborescence des Équipements",
+    },
+    "equipment_code": {
+        "ko": "장비 코드", "en": "Equipment Code", "zh": "设备代码", "ja": "機器コード",
+        "ar": "رمز المعدات", "es": "Código de Equipo", "hi": "उपकरण कोड", "fr": "Code Équipement",
+    },
+    "maker": {
+        "ko": "제조사", "en": "Maker", "zh": "制造商", "ja": "メーカー",
+        "ar": "الشركة المصنعة", "es": "Fabricante", "hi": "निर्माता", "fr": "Fabricant",
+    },
+    "serial_number": {
+        "ko": "시리얼 번호", "en": "Serial Number", "zh": "序列号", "ja": "シリアル番号",
+        "ar": "الرقم التسلسلي", "es": "Número de Serie", "hi": "सीरियल नंबर", "fr": "Numéro de Série",
+    },
+    "category": {
+        "ko": "카테고리", "en": "Category", "zh": "类别", "ja": "カテゴリー",
+        "ar": "الفئة", "es": "Categoría", "hi": "श्रेणी", "fr": "Catégorie",
+    },
+
+    # ── 운전시간 (Running Hours) ──
+    "nav_running_hours": {
+        "ko": "운전시간", "en": "Running Hours", "zh": "运行时间", "ja": "運転時間",
+        "ar": "ساعات التشغيل", "es": "Horas de Funcionamiento", "hi": "चलने के घंटे", "fr": "Heures de Fonctionnement",
+    },
+    "running_hours": {
+        "ko": "운전시간", "en": "Running Hours", "zh": "运行时间", "ja": "運転時間",
+        "ar": "ساعات التشغيل", "es": "Horas de Funcionamiento", "hi": "चलने के घंटे", "fr": "Heures de Fonctionnement",
+    },
+    "daily_hours": {
+        "ko": "일일 운전시간", "en": "Daily Hours", "zh": "每日运行时间", "ja": "日次運転時間",
+        "ar": "ساعات التشغيل اليومية", "es": "Horas Diarias", "hi": "दैनिक घंटे", "fr": "Heures Journalières",
+    },
+    "total_hours": {
+        "ko": "누적 시간", "en": "Total Hours", "zh": "累计时间", "ja": "累計時間",
+        "ar": "إجمالي الساعات", "es": "Horas Totales", "hi": "कुल घंटे", "fr": "Heures Totales",
+    },
+    "record_hours": {
+        "ko": "시간 기록", "en": "Record Hours", "zh": "记录时间", "ja": "時間記録",
+        "ar": "تسجيل الساعات", "es": "Registrar Horas", "hi": "घंटे दर्ज करें", "fr": "Enregistrer les Heures",
+    },
+
+    # ── PMS (정비 계획 관리) ──
+    "nav_pms": {
+        "ko": "PMS", "en": "PMS", "zh": "PMS", "ja": "PMS",
+        "ar": "PMS", "es": "PMS", "hi": "PMS", "fr": "PMS",
+    },
+    "maintenance_plan": {
+        "ko": "정비 계획", "en": "Maintenance Plan", "zh": "维护计划", "ja": "整備計画",
+        "ar": "خطة الصيانة", "es": "Plan de Mantenimiento", "hi": "रखरखाव योजना", "fr": "Plan de Maintenance",
+    },
+    "maintenance_plans": {
+        "ko": "정비 계획", "en": "Maintenance Plans", "zh": "维护计划", "ja": "整備計画一覧",
+        "ar": "خطط الصيانة", "es": "Planes de Mantenimiento", "hi": "रखरखाव योजनाएं", "fr": "Plans de Maintenance",
+    },
+
+    # ── 작업지시서 (Work Orders) ──
+    "nav_work_orders": {
+        "ko": "작업지시서", "en": "Work Orders", "zh": "工作指令", "ja": "作業指示書",
+        "ar": "أوامر العمل", "es": "Órdenes de Trabajo", "hi": "कार्य आदेश", "fr": "Ordres de Travail",
+    },
+    "work_orders": {
+        "ko": "작업지시서", "en": "Work Orders", "zh": "工作指令", "ja": "作業指示書",
+        "ar": "أوامر العمل", "es": "Órdenes de Trabajo", "hi": "कार्य आदेश", "fr": "Ordres de Travail",
+    },
+    "planned": {
+        "ko": "계획됨", "en": "Planned", "zh": "已计划", "ja": "計画済み",
+        "ar": "مخطط", "es": "Planificado", "hi": "नियोजित", "fr": "Planifié",
+    },
+    "overdue": {
+        "ko": "초과", "en": "Overdue", "zh": "逾期", "ja": "超過",
+        "ar": "متأخر", "es": "Vencido", "hi": "अतिदेय", "fr": "En Retard",
+    },
+    "postponed": {
+        "ko": "연기됨", "en": "Postponed", "zh": "已推迟", "ja": "延期",
+        "ar": "مؤجل", "es": "Pospuesto", "hi": "स्थगित", "fr": "Reporté",
+    },
+    "priority": {
+        "ko": "우선순위", "en": "Priority", "zh": "优先级", "ja": "優先度",
+        "ar": "الأولوية", "es": "Prioridad", "hi": "प्राथमिकता", "fr": "Priorité",
+    },
+    "critical": {
+        "ko": "긴급", "en": "Critical", "zh": "紧急", "ja": "緊急",
+        "ar": "حرج", "es": "Crítico", "hi": "गंभीर", "fr": "Critique",
+    },
+    "high": {
+        "ko": "높음", "en": "High", "zh": "高", "ja": "高",
+        "ar": "عالي", "es": "Alto", "hi": "उच्च", "fr": "Élevé",
+    },
+    "medium": {
+        "ko": "보통", "en": "Medium", "zh": "中", "ja": "中",
+        "ar": "متوسط", "es": "Medio", "hi": "मध्यम", "fr": "Moyen",
+    },
+    "low": {
+        "ko": "낮음", "en": "Low", "zh": "低", "ja": "低",
+        "ar": "منخفض", "es": "Bajo", "hi": "कम", "fr": "Faible",
+    },
+    "due_date": {
+        "ko": "마감일", "en": "Due Date", "zh": "截止日期", "ja": "期限",
+        "ar": "تاريخ الاستحقاق", "es": "Fecha de Vencimiento", "hi": "नियत तारीख", "fr": "Date d'Échéance",
+    },
+    "planned_date": {
+        "ko": "계획일", "en": "Planned Date", "zh": "计划日期", "ja": "計画日",
+        "ar": "التاريخ المخطط", "es": "Fecha Planificada", "hi": "नियोजित तिथि", "fr": "Date Prévue",
+    },
+    "completed_date": {
+        "ko": "완료일", "en": "Completed Date", "zh": "完成日期", "ja": "完了日",
+        "ar": "تاريخ الإنجاز", "es": "Fecha de Finalización", "hi": "पूर्ण होने की तिथि", "fr": "Date d'Achèvement",
+    },
+    "completion_rate": {
+        "ko": "완료율", "en": "Completion Rate", "zh": "完成率", "ja": "完了率",
+        "ar": "نسبة الإنجاز", "es": "Tasa de Completación", "hi": "पूर्णता दर", "fr": "Taux d'Achèvement",
+    },
+    "class_related": {
+        "ko": "선급 관련", "en": "Class Related", "zh": "船级相关", "ja": "船級関連",
+        "ar": "متعلق بالتصنيف", "es": "Relacionado con Clase", "hi": "वर्ग संबंधित", "fr": "Lié à la Classification",
+    },
+    "overhaul_progress": {
+        "ko": "오버홀 진행률", "en": "Overhaul Progress", "zh": "大修进度", "ja": "オーバーホール進捗",
+        "ar": "تقدم الصيانة الشاملة", "es": "Progreso de Overhaul", "hi": "ओवरहॉल प्रगति", "fr": "Progression de la Révision",
+    },
+    "upcoming": {
+        "ko": "예정", "en": "Upcoming", "zh": "即将到来", "ja": "予定",
+        "ar": "القادم", "es": "Próximo", "hi": "आगामी", "fr": "À Venir",
+    },
+
+    # ── 역할 (Roles) ──
+    "role_admin": {
+        "ko": "관리자", "en": "Admin", "zh": "管理员", "ja": "管理者",
+        "ar": "مسؤول", "es": "Administrador", "hi": "व्यवस्थापक", "fr": "Administrateur",
+    },
+    "role_captain": {
+        "ko": "선장", "en": "Captain", "zh": "船长", "ja": "船長",
+        "ar": "القبطان", "es": "Capitán", "hi": "कप्तान", "fr": "Capitaine",
+    },
+    "role_chief_engineer": {
+        "ko": "기관장", "en": "Chief Engineer", "zh": "轮机长", "ja": "機関長",
+        "ar": "كبير المهندسين", "es": "Jefe de Máquinas", "hi": "मुख्य इंजीनियर", "fr": "Chef Mécanicien",
+    },
+    "role_shore_manager": {
+        "ko": "육상 관리자", "en": "Shore Manager", "zh": "岸上管理员", "ja": "陸上管理者",
+        "ar": "مدير الشاطئ", "es": "Gerente de Costa", "hi": "तट प्रबंधक", "fr": "Responsable à Terre",
+    },
+    "role_engineer": {
+        "ko": "엔지니어", "en": "Engineer", "zh": "工程师", "ja": "エンジニア",
+        "ar": "مهندس", "es": "Ingeniero", "hi": "इंजीनियर", "fr": "Ingénieur",
+    },
+    "role_customer": {
+        "ko": "고객", "en": "Customer", "zh": "客户", "ja": "顧客",
+        "ar": "عميل", "es": "Cliente", "hi": "ग्राहक", "fr": "Client",
+    },
+
+    # ── 대시보드 확장 (Dashboard - Phase 3) ──
+    "vessel_dashboard": {
+        "ko": "선박 대시보드", "en": "Vessel Dashboard", "zh": "船舶仪表盘", "ja": "船舶ダッシュボード",
+        "ar": "لوحة السفينة", "es": "Panel del Buque", "hi": "जहाज डैशबोर्ड", "fr": "Tableau de Bord du Navire",
+    },
+    "pms_overdue": {
+        "ko": "PMS 초과", "en": "PMS Overdue", "zh": "PMS逾期", "ja": "PMS超過",
+        "ar": "PMS متأخر", "es": "PMS Vencido", "hi": "PMS अतिदेय", "fr": "PMS en Retard",
+    },
+    "pending_orders": {
+        "ko": "대기 주문", "en": "Pending Orders", "zh": "待处理订单", "ja": "保留中の注文",
+        "ar": "الطلبات المعلقة", "es": "Pedidos Pendientes", "hi": "लंबित ऑर्डर", "fr": "Commandes en Attente",
+    },
+    "completed_orders": {
+        "ko": "완료 주문", "en": "Completed Orders", "zh": "已完成订单", "ja": "完了した注文",
+        "ar": "الطلبات المكتملة", "es": "Pedidos Completados", "hi": "पूर्ण ऑर्डर", "fr": "Commandes Terminées",
     },
 }
 

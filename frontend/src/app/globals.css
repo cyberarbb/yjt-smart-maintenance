@@ -9,6 +9,7 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-text-size-adjust: 100%;
 }
 
 /* Scrollbar */
@@ -30,4 +31,35 @@ body {
 }
 .animate-fade-in {
   animation: fadeIn 0.3s ease-out;
+}
+
+/* 모바일 테이블 스크롤 래퍼 */
+.table-scroll-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+/* 모바일 safe area 지원 */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Print styles */
+@media print {
+  aside, header, .print-hide {
+    display: none !important;
+  }
+  main {
+    margin-left: 0 !important;
+    padding-top: 0 !important;
+  }
+  .print-content {
+    padding: 0 !important;
+  }
+  body {
+    background: white !important;
+  }
 }

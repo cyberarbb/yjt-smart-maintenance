@@ -41,6 +41,8 @@ class Part(Base):
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     unit_price: Mapped[float] = mapped_column(Float, default=0.0)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    equipment_id: Mapped[str | None] = mapped_column(String(36), nullable=True, index=True)
+    lead_time_days: Mapped[int | None] = mapped_column(nullable=True)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     inventory = relationship("Inventory", back_populates="part", uselist=False)

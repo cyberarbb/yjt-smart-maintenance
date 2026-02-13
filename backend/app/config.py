@@ -14,7 +14,7 @@ load_dotenv(_ENV_FILE, override=True)
 
 
 class Settings(BaseSettings):
-    app_name: str = "YJT Smart Maintenance Platform"
+    app_name: str = "YJT Smart Vessel Management Platform"
     app_env: str = "development"
     app_debug: bool = True
     secret_key: str = "dev-secret-key-change-in-production"
@@ -24,6 +24,17 @@ class Settings(BaseSettings):
 
     # Anthropic Claude API
     anthropic_api_key: str = ""
+
+    # Google Sheets 동기화
+    google_sheets_credentials_file: str = ""
+    google_sheets_spreadsheet_id: str = ""
+
+    # SMTP 이메일 설정
+    smtp_host: str = "smtp.gmail.com"
+    smtp_port: int = 587
+    smtp_user: str = ""          # e.g. yjt@yjturbo.com (Gmail or Google Workspace)
+    smtp_password: str = ""      # 앱 비밀번호 (2단계 인증 후 생성)
+    smtp_from_name: str = "YJT Smart Maintenance"
 
     # CORS
     frontend_url: str = "http://localhost:3000"

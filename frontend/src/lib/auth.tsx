@@ -12,6 +12,17 @@ interface User {
   preferred_language: string;
   is_active: boolean;
   is_admin: boolean;
+  // 역할 시스템
+  role?: string;
+  vessel_id?: string | null;
+  // 네임카드 필드
+  namecard_title?: string;
+  namecard_department?: string;
+  namecard_mobile?: string;
+  namecard_fax?: string;
+  namecard_address?: string;
+  namecard_website?: string;
+  namecard_custom_html?: string;
 }
 
 interface AuthContextType {
@@ -111,7 +122,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(data.user);
   }
 
-  function logout() {
+  async function logout() {
+    // 백엔드에 로그아웃 기록
+    if (token) {
+      try {
+        await fetch("/api/auth/logout", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } catch {
+        // 로그아웃 기록 실패해도 로컬 세션은 정리
+      }
+    }
     localStorage.removeItem("yjt_token");
     setToken(null);
     setUser(null);

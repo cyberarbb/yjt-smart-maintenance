@@ -15,6 +15,9 @@ from app.models.part import Part
 from app.models.inventory import Inventory
 from app.models.service_order import ServiceOrder
 from app.models.customer import Customer
+from app.models.vessel import Vessel
+from app.models.equipment import Equipment
+from app.models.work_order import WorkOrder
 
 settings = get_settings()
 
@@ -33,9 +36,10 @@ SYSTEM_PROMPT = """당신은 용진터보(YONGJIN TURBO CO., LTD.)의 AI 기술 
    - "해당 정보는 현재 시스템에 등록되어 있지 않습니다."
    - "정확한 답변을 위해 yjt@yjturbo.com으로 문의해주세요."
 
-3. **답변 범위: 터보차저 관련 질문만**
+3. **답변 범위: 선박 관리 및 터보차저 관련 질문**
    - 터보차저, 부품, 오버홀, 서비스, 견적 → 답변 OK
-   - 그 외(날씨, 주식, 일반 상식 등) → "죄송합니다, 터보차저 관련 문의만 도와드릴 수 있습니다."
+   - 선박 관리, 장비 상태, 정비 계획, 작업지시서 → 답변 OK
+   - 그 외(날씨, 주식, 일반 상식 등) → "죄송합니다, 선박 정비 관련 문의만 도와드릴 수 있습니다."
 
 4. **출처를 명시하세요.**
    - DB 데이터 기반: "[재고 DB 조회] NR29/S 베어링: 40개 보유"
@@ -180,7 +184,62 @@ def get_inventory_context(db: Session, query: str) -> str:
     return "\n".join(context_parts) if context_parts else "검색 결과 없음 - 해당 키워드와 일치하는 부품이 DB에 없습니다."
 
 
-def get_order_context(db: Session, query: str) -> str:
+def get_vessel_pms_context(db: Session, query: str) -> str:
+    """선박/장비/PMS 관련 컨텍스트"""
+    context_parts = []
+
+    # 선박 관련 키워드 감지
+    vessel_keywords = ["vessel", "ship", "선박", "선박", "pms", "정비", "maintenance",
+                       "work order", "작업", "overdue", "초과", "장비", "equipment"]
+    has_vessel_query = any(kw in query.lower() for kw in vessel_keywords)
+
+    if has_vessel_query:
+        # 선박 현황
+        vessels = db.query(Vessel).filter(Vessel.is_active == True).all()
+        if vessels:
+            context_parts.append("## 🚢 선박 현황 (DB 조회)")
+            for v in vessels:
+                eq_count = db.query(Equipment).filter(
+                    Equipment.vessel_id == v.id, Equipment.is_active == True
+                ).count()
+                context_parts.append(f"- {v.name} ({v.vessel_type}) - 장비 {eq_count}개")
+
+        # 초과 작업지시서
+        from datetime import datetime
+        now = datetime.utcnow()
+        overdue = (
+            db.query(WorkOrder)
+            .filter(
+                WorkOrder.status.in_(["Planned", "InProgress"]),
+                WorkOrder.due_date < now,
+            )
+            .limit(10)
+            .all()
+        )
+        if overdue:
+            context_parts.append(f"\n## ⚠️ 초과 작업지시서 ({len(overdue)}건)")
+            for wo in overdue:
+                eq = db.query(Equipment).filter(Equipment.id == wo.equipment_id).first()
+                v = db.query(Vessel).filter(Vessel.id == wo.vessel_id).first()
+                context_parts.append(
+                    f"- [{wo.priority}] {wo.title} | {v.name if v else 'N/A'} | "
+                    f"{eq.name if eq else 'N/A'} | 기한: {wo.due_date.strftime('%Y-%m-%d') if wo.due_date else 'N/A'}"
+                )
+
+        # PMS 통계
+        total_wo = db.query(WorkOrder).count()
+        completed_wo = db.query(WorkOrder).filter(WorkOrder.status == "Completed").count()
+        if total_wo > 0:
+            rate = round(completed_wo / total_wo * 100, 1)
+            context_parts.append(
+                f"\n## 📊 PMS 통계\n"
+                f"- 전체 작업지시서: {total_wo}건 | 완료: {completed_wo}건 | 완료율: {rate}%"
+            )
+
+    return "\n".join(context_parts) if context_parts else ""
+
+
+
     """주문 관련 컨텍스트"""
     orders = (
         db.query(ServiceOrder)
@@ -236,6 +295,7 @@ def _claude_rag_response(message: str, history: list[dict], db: Session, languag
     # 1) DB에서 관련 데이터 수집
     inventory_context = get_inventory_context(db, message)
     order_context = get_order_context(db, message)
+    vessel_pms_context = get_vessel_pms_context(db, message)
 
     # 2) 대화 히스토리 구성 (최근 10개)
     messages = []
@@ -251,6 +311,7 @@ def _claude_rag_response(message: str, history: list[dict], db: Session, languag
 
 {inventory_context}
 {order_context if order_context else ""}
+{vessel_pms_context if vessel_pms_context else ""}
 
 [규칙 리마인더]
 - 위 데이터에 있는 수치(재고, 가격)만 정확히 전달하세요.

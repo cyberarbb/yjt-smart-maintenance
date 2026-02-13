@@ -10,6 +10,8 @@ class PartBase(BaseModel):
     category: str
     description: str | None = None
     unit_price: float = 0.0
+    equipment_id: str | None = None
+    lead_time_days: int | None = None
 
 
 class PartCreate(PartBase):
@@ -23,6 +25,8 @@ class PartUpdate(BaseModel):
     category: str | None = None
     description: str | None = None
     unit_price: float | None = None
+    equipment_id: str | None = None
+    lead_time_days: int | None = None
 
 
 class PartResponse(PartBase):

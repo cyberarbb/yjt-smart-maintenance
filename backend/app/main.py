@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.database import engine, Base, dispose_engine
-from app.routers import parts, inventory, customers, service_orders, inquiries, chatbot, auth, i18n
+from app.routers import parts, inventory, customers, service_orders, inquiries, chatbot, auth, i18n, notifications, analytics, sync, email, vessels, equipment, running_hours, maintenance, activity_log
 
 logger = logging.getLogger("uvicorn.error")
 settings = get_settings()
@@ -14,6 +14,13 @@ settings = get_settings()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # ▶ Startup
+    from app.models.notification import Notification  # noqa: F401 - 테이블 생성
+    from app.models.vessel import Vessel  # noqa: F401 - 테이블 생성
+    from app.models.equipment import Equipment  # noqa: F401 - 테이블 생성
+    from app.models.running_hours import RunningHours  # noqa: F401 - 테이블 생성
+    from app.models.maintenance_plan import MaintenancePlan  # noqa: F401
+    from app.models.work_order import WorkOrder  # noqa: F401
+    from app.models.activity_log import ActivityLog  # noqa: F401
     Base.metadata.create_all(bind=engine)
     from app.seed.seed_data import seed_database
     seed_database()
@@ -26,9 +33,10 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title=settings.app_name,
-    description="용진터보 AI 기반 스마트 정비 플랫폼 API",
+    description="YJT AI-Powered Smart Vessel Management Platform API",
     version="1.0.0",
     lifespan=lifespan,
+    redirect_slashes=False,
 )
 
 
@@ -72,11 +80,20 @@ app.include_router(inquiries.router, prefix="/api/inquiries", tags=["Inquiries"]
 app.include_router(chatbot.router, prefix="/api/chat", tags=["AI Chatbot"])
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(i18n.router, prefix="/api/i18n", tags=["i18n"])
+app.include_router(notifications.router, prefix="/api/notifications", tags=["Notifications"])
+app.include_router(analytics.router, prefix="/api/analytics", tags=["Analytics"])
+app.include_router(sync.router, prefix="/api/sync", tags=["Sync"])
+app.include_router(email.router, prefix="/api/email", tags=["Email"])
+app.include_router(vessels.router, prefix="/api/vessels", tags=["Vessels"])
+app.include_router(equipment.router, prefix="/api", tags=["Equipment"])
+app.include_router(running_hours.router, prefix="/api/running-hours", tags=["Running Hours"])
+app.include_router(maintenance.router, prefix="/api/pms", tags=["PMS"])
+app.include_router(activity_log.router, prefix="/api/activity-log", tags=["Activity Log"])
 
 
 @app.get("/")
 def root():
-    return {"message": "YJT Smart Maintenance Platform API", "version": "1.0.0"}
+    return {"message": "YJT Smart Vessel Management Platform API", "version": "2.0.0"}
 
 
 @app.get("/api/health")

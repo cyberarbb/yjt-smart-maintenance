@@ -44,3 +44,4 @@ test_output.txt
 
 # Claude plans (로컬 전용)
 .claude/
+nul

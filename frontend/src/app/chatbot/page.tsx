@@ -81,15 +81,15 @@ export default function ChatbotPage() {
   const currentSuggestions = suggestions[lang] || suggestions.en;
 
   return (
-    <div className="h-[calc(100vh-8rem)] flex flex-col">
-      <h1 className="text-2xl font-bold text-gray-800 mb-4">
+    <div className="h-[calc(100vh-7rem)] sm:h-[calc(100vh-8rem)] flex flex-col">
+      <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-3 sm:mb-4">
         {t("chat_title")}
       </h1>
 
       {/* Chat Area */}
-      <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col overflow-hidden">
+      <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col overflow-hidden min-h-0">
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+        <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-3 sm:space-y-4">
           {messages.map((msg, i) => (
             <div
               key={i}
@@ -98,7 +98,7 @@ export default function ChatbotPage() {
               } animate-fade-in`}
             >
               <div
-                className={`max-w-[70%] rounded-2xl px-4 py-3 ${
+                className={`max-w-[85%] sm:max-w-[70%] rounded-2xl px-3 py-2 sm:px-4 sm:py-3 ${
                   msg.role === "user"
                     ? "bg-blue-600 text-white"
                     : "bg-gray-100 text-gray-800"
@@ -111,7 +111,7 @@ export default function ChatbotPage() {
                     </span>
                   </div>
                 )}
-                <div className="text-sm whitespace-pre-wrap leading-relaxed">
+                <div className="text-xs sm:text-sm whitespace-pre-wrap leading-relaxed">
                   {msg.content}
                 </div>
               </div>
@@ -134,12 +134,12 @@ export default function ChatbotPage() {
 
         {/* Suggestions */}
         {messages.length <= 1 && (
-          <div className="px-6 pb-3 flex flex-wrap gap-2">
+          <div className="px-3 sm:px-6 pb-2 sm:pb-3 flex flex-wrap gap-1.5 sm:gap-2">
             {currentSuggestions.map((s) => (
               <button
                 key={s}
                 onClick={() => setInput(s)}
-                className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-full text-xs font-medium hover:bg-blue-100 transition-colors"
+                className="px-2 py-1 sm:px-3 sm:py-1.5 bg-blue-50 text-blue-600 rounded-full text-[11px] sm:text-xs font-medium hover:bg-blue-100 transition-colors"
               >
                 {s}
               </button>
@@ -148,19 +148,19 @@ export default function ChatbotPage() {
         )}
 
         {/* Input */}
-        <form onSubmit={handleSend} className="p-4 border-t border-gray-200 flex gap-3">
+        <form onSubmit={handleSend} className="p-2 sm:p-4 border-t border-gray-200 flex gap-2 sm:gap-3 safe-bottom">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={t("chat_placeholder")}
-            className="flex-1 px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 min-w-0 px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             disabled={loading}
           />
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="px-6 py-3 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-2 sm:px-6 sm:py-3 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0"
           >
             {t("chat_send")}
           </button>

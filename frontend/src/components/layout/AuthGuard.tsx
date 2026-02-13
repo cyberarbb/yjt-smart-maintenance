@@ -48,13 +48,14 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   }
 
   // ✅ 인증됨 - 사이드바 + 헤더와 함께 렌더링
+  // 모바일: ml-0, 데스크톱: ml-64 (lg breakpoint)
   return (
-    <div dir={dir}>
+    <div dir={dir} className="min-h-screen">
       <WelcomeModal />
       <Sidebar />
-      <div className={dir === "rtl" ? "mr-64" : "ml-64"}>
+      <div className={`${dir === "rtl" ? "lg:mr-64" : "lg:ml-64"} transition-[margin] duration-300`}>
         <Header />
-        <main className="p-8">{children}</main>
+        <main className="p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
     </div>
   );

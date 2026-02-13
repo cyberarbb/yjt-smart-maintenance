@@ -7,6 +7,9 @@ from app.models.inventory import Inventory
 from app.models.customer import Customer
 from app.models.service_order import ServiceOrder
 from app.models.inquiry import Inquiry
+from app.models.user import User
+from app.models.vessel import Vessel  # noqa: F401 - 테이블 생성
+from app.services.auth_service import hash_password
 
 PARTS_DATA = [
     # MAN NR Type 부품
@@ -115,6 +118,23 @@ def seed_database():
             order = ServiceOrder(customer_id=customers[idx].id, **o)
             db.add(order)
 
+        # Admin User (관리자 계정 시드)
+        if db.query(User).count() == 0:
+            admin_user = User(
+                email="admin@yjt.com",
+                hashed_password=hash_password("admin123"),
+                full_name="YJT Admin",
+                company="YONGJIN TURBO",
+                country="South Korea",
+                phone="+82-51-123-4567",
+                preferred_language="ko",
+                is_admin=True,
+                role="developer",
+            )
+            db.add(admin_user)
+            db.flush()
+            print("  → Developer user created: admin@yjt.com / admin123")
+
         # Sample Inquiry
         inquiry = Inquiry(
             customer_id=customers[2].id,
@@ -133,6 +153,34 @@ def seed_database():
         raise
     finally:
         db.close()
+
+    # 선박 시드 데이터 (별도 함수)
+    try:
+        from app.seed.seed_vessels import seed_vessels
+        seed_vessels()
+    except Exception as e:
+        print(f"Vessel seed error (non-critical): {e}")
+
+    # 장비 시드 데이터 (별도 함수)
+    try:
+        from app.seed.seed_equipment import seed_equipment
+        seed_equipment()
+    except Exception as e:
+        print(f"Equipment seed error (non-critical): {e}")
+
+    # 운전시간 시드 데이터 (별도 함수)
+    try:
+        from app.seed.seed_running_hours import seed_running_hours
+        seed_running_hours()
+    except Exception as e:
+        print(f"Running hours seed error (non-critical): {e}")
+
+    # PMS 시드 데이터 (별도 함수)
+    try:
+        from app.seed.seed_pms import seed_pms
+        seed_pms()
+    except Exception as e:
+        print(f"PMS seed error (non-critical): {e}")
 
 
 if __name__ == "__main__":

@@ -39,6 +39,11 @@ const nextConfig: NextConfig = {
 
   // ── 서버 외부 패키지 (Next.js 15+에서 experimental 밖으로 이동) ──
   serverExternalPackages: [],
+
+  // ── ngrok 등 외부 오리진 허용 (dev 모드) ──
+  allowedDevOrigins: [
+    "https://daisey-hyperorganic-galvanically.ngrok-free.dev",
+  ],
 };
 
 export default nextConfig;

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session, joinedload
 from app.database import get_db
 from app.models.inventory import Inventory
 from app.models.part import Part
+from app.models.user import User
 from app.schemas.inventory import (
     InventoryCreate,
     InventoryUpdate,
@@ -10,16 +11,19 @@ from app.schemas.inventory import (
     InventoryResponse,
     InventoryWithPart,
 )
+from app.services.auth_service import get_current_user, get_admin_user
+from app.services.notification_service import check_low_stock_notification
 
 router = APIRouter()
 
 
-@router.get("/", response_model=list[InventoryWithPart])
+@router.get("", response_model=list[InventoryWithPart])
 def get_inventory(
     low_stock_only: bool = False,
     warehouse: str | None = None,
     skip: int = 0,
     limit: int = 50,
+    user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     query = db.query(Inventory).options(joinedload(Inventory.part))
@@ -50,7 +54,7 @@ def get_inventory(
 
 
 @router.get("/low-stock", response_model=list[InventoryWithPart])
-def get_low_stock(db: Session = Depends(get_db)):
+def get_low_stock(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     items = (
         db.query(Inventory)
         .options(joinedload(Inventory.part))
@@ -77,7 +81,7 @@ def get_low_stock(db: Session = Depends(get_db)):
 
 
 @router.get("/stats")
-def get_inventory_stats(db: Session = Depends(get_db)):
+def get_inventory_stats(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     total_items = db.query(Inventory).count()
     low_stock = db.query(Inventory).filter(Inventory.quantity <= Inventory.min_quantity).count()
     total_quantity = sum(
@@ -91,7 +95,7 @@ def get_inventory_stats(db: Session = Depends(get_db)):
 
 
 @router.put("/{inventory_id}", response_model=InventoryResponse)
-def update_inventory(inventory_id: str, data: InventoryUpdate, db: Session = Depends(get_db)):
+def update_inventory(inventory_id: str, data: InventoryUpdate, admin: User = Depends(get_admin_user), db: Session = Depends(get_db)):
     inv = db.query(Inventory).filter(Inventory.id == inventory_id).first()
     if not inv:
         raise HTTPException(status_code=404, detail="Inventory not found")
@@ -104,7 +108,7 @@ def update_inventory(inventory_id: str, data: InventoryUpdate, db: Session = Dep
 
 
 @router.post("/{inventory_id}/adjust", response_model=InventoryResponse)
-def adjust_inventory(inventory_id: str, data: InventoryAdjust, db: Session = Depends(get_db)):
+def adjust_inventory(inventory_id: str, data: InventoryAdjust, admin: User = Depends(get_admin_user), db: Session = Depends(get_db)):
     inv = db.query(Inventory).filter(Inventory.id == inventory_id).first()
     if not inv:
         raise HTTPException(status_code=404, detail="Inventory not found")
@@ -116,4 +120,10 @@ def adjust_inventory(inventory_id: str, data: InventoryAdjust, db: Session = Dep
     inv.quantity = new_qty
     db.commit()
     db.refresh(inv)
+
+    # 저재고 알림 트리거
+    part = db.query(Part).filter(Part.id == inv.part_id).first()
+    if part:
+        check_low_stock_notification(db, part.name, new_qty, inv.min_quantity, inv.id)
+
     return inv

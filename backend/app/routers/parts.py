@@ -4,18 +4,21 @@ from sqlalchemy import or_
 from app.database import get_db
 from app.models.part import Part
 from app.models.inventory import Inventory
+from app.models.user import User
 from app.schemas.part import PartCreate, PartUpdate, PartResponse, PartWithInventory
+from app.services.auth_service import get_current_user, get_admin_user
 
 router = APIRouter()
 
 
-@router.get("/", response_model=list[PartWithInventory])
+@router.get("", response_model=list[PartWithInventory])
 def get_parts(
     skip: int = 0,
     limit: int = 50,
     brand: str | None = None,
     category: str | None = None,
     search: str | None = None,
+    user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     query = db.query(Part)
@@ -47,8 +50,20 @@ def get_parts(
     return result
 
 
+@router.get("/brands/list", response_model=list[str])
+def get_brands(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    brands = db.query(Part.brand).distinct().all()
+    return [b[0] for b in brands]
+
+
+@router.get("/categories/list", response_model=list[str])
+def get_categories(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    categories = db.query(Part.category).distinct().all()
+    return [c[0] for c in categories]
+
+
 @router.get("/{part_id}", response_model=PartWithInventory)
-def get_part(part_id: str, db: Session = Depends(get_db)):
+def get_part(part_id: str, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     part = db.query(Part).filter(Part.id == part_id).first()
     if not part:
         raise HTTPException(status_code=404, detail="Part not found")
@@ -63,8 +78,8 @@ def get_part(part_id: str, db: Session = Depends(get_db)):
     return result
 
 
-@router.post("/", response_model=PartResponse, status_code=201)
-def create_part(part_data: PartCreate, db: Session = Depends(get_db)):
+@router.post("", response_model=PartResponse, status_code=201)
+def create_part(part_data: PartCreate, admin: User = Depends(get_admin_user), db: Session = Depends(get_db)):
     existing = db.query(Part).filter(Part.part_number == part_data.part_number).first()
     if existing:
         raise HTTPException(status_code=400, detail="Part number already exists")
@@ -83,7 +98,7 @@ def create_part(part_data: PartCreate, db: Session = Depends(get_db)):
 
 
 @router.put("/{part_id}", response_model=PartResponse)
-def update_part(part_id: str, part_data: PartUpdate, db: Session = Depends(get_db)):
+def update_part(part_id: str, part_data: PartUpdate, admin: User = Depends(get_admin_user), db: Session = Depends(get_db)):
     part = db.query(Part).filter(Part.id == part_id).first()
     if not part:
         raise HTTPException(status_code=404, detail="Part not found")
@@ -96,22 +111,10 @@ def update_part(part_id: str, part_data: PartUpdate, db: Session = Depends(get_d
 
 
 @router.delete("/{part_id}")
-def delete_part(part_id: str, db: Session = Depends(get_db)):
+def delete_part(part_id: str, admin: User = Depends(get_admin_user), db: Session = Depends(get_db)):
     part = db.query(Part).filter(Part.id == part_id).first()
     if not part:
         raise HTTPException(status_code=404, detail="Part not found")
     db.delete(part)
     db.commit()
     return {"message": "Part deleted"}
-
-
-@router.get("/brands/list", response_model=list[str])
-def get_brands(db: Session = Depends(get_db)):
-    brands = db.query(Part.brand).distinct().all()
-    return [b[0] for b in brands]
-
-
-@router.get("/categories/list", response_model=list[str])
-def get_categories(db: Session = Depends(get_db)):
-    categories = db.query(Part.category).distinct().all()
-    return [c[0] for c in categories]
