@@ -109,3 +109,40 @@ def root():
 @app.get("/api/health")
 def health_check():
     return {"status": "ok"}
+
+
+@app.get("/api/debug/db")
+def debug_db():
+    """DB 연결 및 테이블 상태 확인 (디버깅용)"""
+    from sqlalchemy import inspect, text
+    from app.database import engine, SessionLocal
+    result = {"db_url_type": "unknown", "tables": [], "user_count": 0, "errors": []}
+
+    try:
+        # DB URL 타입 확인
+        url_str = str(engine.url)
+        if "postgresql" in url_str or "postgres" in url_str:
+            result["db_url_type"] = "postgresql"
+        elif "sqlite" in url_str:
+            result["db_url_type"] = "sqlite"
+        else:
+            result["db_url_type"] = url_str[:30]
+
+        # 테이블 목록
+        inspector = inspect(engine)
+        result["tables"] = inspector.get_table_names()
+
+        # 유저 수 확인
+        db = SessionLocal()
+        try:
+            count = db.execute(text("SELECT COUNT(*) FROM users")).scalar()
+            result["user_count"] = count
+        except Exception as e:
+            result["errors"].append(f"user query: {str(e)}")
+        finally:
+            db.close()
+
+    except Exception as e:
+        result["errors"].append(f"db connect: {str(e)}")
+
+    return result

@@ -40,82 +40,97 @@ class ResetPasswordRequest(BaseModel):
 @router.post("/register", response_model=TokenResponse, status_code=201)
 def register(data: UserRegister, db: Session = Depends(get_db)):
     """회원가입"""
-    # 이메일 중복 체크
-    if db.query(User).filter(User.email == data.email).first():
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Email already registered",
+    try:
+        # 이메일 중복 체크
+        if db.query(User).filter(User.email == data.email).first():
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Email already registered",
+            )
+
+        # 비밀번호 최소 길이
+        if len(data.password) < 6:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Password must be at least 6 characters",
+            )
+
+        user = User(
+            email=data.email,
+            hashed_password=hash_password(data.password),
+            full_name=data.full_name,
+            company=data.company,
+            country=data.country,
+            phone=data.phone,
+            preferred_language=data.preferred_language,
         )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
 
-    # 비밀번호 최소 길이
-    if len(data.password) < 6:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Password must be at least 6 characters",
+        token = create_access_token(user.id)
+        return TokenResponse(
+            access_token=token,
+            user=UserResponse.model_validate(user),
         )
-
-    user = User(
-        email=data.email,
-        hashed_password=hash_password(data.password),
-        full_name=data.full_name,
-        company=data.company,
-        country=data.country,
-        phone=data.phone,
-        preferred_language=data.preferred_language,
-    )
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-
-    token = create_access_token(user.id)
-    return TokenResponse(
-        access_token=token,
-        user=UserResponse.model_validate(user),
-    )
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Register failed: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
 
 
 @router.post("/login", response_model=TokenResponse)
 def login(data: UserLogin, request: Request, db: Session = Depends(get_db)):
     """로그인"""
-    ip_address = request.client.host if request.client else ""
-    user_agent = request.headers.get("user-agent", "")
+    try:
+        ip_address = request.client.host if request.client else ""
+        user_agent = request.headers.get("user-agent", "")
 
-    user = db.query(User).filter(User.email == data.email).first()
-    if not user or not verify_password(data.password, user.hashed_password):
-        # 로그인 실패 기록
-        record_activity(
-            db, user_id=user.id if user else "unknown",
-            user_email=data.email, user_name=user.full_name if user else "Unknown",
-            action="login_failed", ip_address=ip_address, user_agent=user_agent,
-            details="Invalid email or password",
-        )
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid email or password",
-        )
+        user = db.query(User).filter(User.email == data.email).first()
+        if not user or not verify_password(data.password, user.hashed_password):
+            # 로그인 실패 기록
+            try:
+                record_activity(
+                    db, user_id=user.id if user else "unknown",
+                    user_email=data.email, user_name=user.full_name if user else "Unknown",
+                    action="login_failed", ip_address=ip_address, user_agent=user_agent,
+                    details="Invalid email or password",
+                )
+            except Exception:
+                pass  # activity log 실패해도 로그인 로직은 계속
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid email or password",
+            )
 
-    if not user.is_active:
-        record_activity(
-            db, user_id=user.id, user_email=user.email, user_name=user.full_name,
-            action="login_failed", ip_address=ip_address, user_agent=user_agent,
-            details="Account is deactivated",
-        )
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Account is deactivated",
-        )
+        if not user.is_active:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Account is deactivated",
+            )
 
-    # 로그인 성공 기록
-    record_activity(
-        db, user_id=user.id, user_email=user.email, user_name=user.full_name,
-        action="login", ip_address=ip_address, user_agent=user_agent,
-    )
+        # 로그인 성공 기록
+        try:
+            record_activity(
+                db, user_id=user.id, user_email=user.email, user_name=user.full_name,
+                action="login", ip_address=ip_address, user_agent=user_agent,
+            )
+        except Exception:
+            pass  # activity log 실패해도 로그인은 계속
 
-    token = create_access_token(user.id)
-    return TokenResponse(
-        access_token=token,
-        user=UserResponse.model_validate(user),
-    )
+        token = create_access_token(user.id)
+        return TokenResponse(
+            access_token=token,
+            user=UserResponse.model_validate(user),
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Login failed: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Login failed: {str(e)}")
 
 
 @router.post("/logout")
