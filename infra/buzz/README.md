@@ -162,6 +162,29 @@ C 방식은 `agent/.env` 에서 `BUZZ_ACP_AGENT_COMMAND=buzz-agent` 로 바꾸�
 지정합니다(`.env.example` 의 [C] 블록 참고). `buzz-agent` 바이너리는 에이전트 이미지에
 함께 빌드되어 있습니다.
 
+### Max 구독으로 돌릴 때 알아둘 것
+
+A 방식은 추가 결제가 없는 대신, **에이전트가 쓰는 만큼 본인 구독 한도에서 빠집니다.**
+구독 한도는 5시간 롤링 창 + 주간 창으로 걸리고 Claude 앱·Claude Code와 같은 통을 씁니다.
+즉 채널에서 에이전트가 크게 돌면 사장님 본인 작업이 한도에 걸릴 수 있습니다.
+
+또 하나, 이 토큰은 **개인 자격증명 하나**입니다. 팀원 전원이 에이전트를 부르면 그 사용량이
+전부 사장님 계정으로 기록됩니다. 팀 단위로 상시 돌릴 계획이라면 B 방식(API 키)으로
+분리하는 편이 사용량 추적·통제 면에서 낫습니다.
+
+파일럿 단계 권장 설정 (`agent/.env`):
+
+```bash
+BUZZ_ACP_RESPOND_TO=owner-only    # 처음엔 본인만, 익숙해지면 allowlist 로 확대
+BUZZ_ACP_AGENTS=1                 # 동시 세션 1개
+BUZZ_ACP_HEARTBEAT_INTERVAL=0     # 유휴 시 자동 호출 끔 (켜면 아무도 안 불러도 한도 소모)
+BUZZ_ACP_MODEL=                   # Sonnet 계열 지정 시 한도 절약
+```
+
+한도에 걸리면 에이전트 응답이 실패합니다. `claude.ai` 의 Settings → Usage 에서
+usage credits 를 켜 두면 한도 초과분을 유료로 이어서 쓸 수 있고, 꺼두면 창이 리셋될
+때까지 기다리게 됩니다. 어느 쪽이든 사장님이 선택하실 문제라 기본값은 건드리지 않았습니다.
+
 ## 7. Claude Code 에이전트 연결
 
 에이전트는 `buzz-acp` 하네스를 통해 붙습니다. 하네스가 릴레이의 @멘션을 듣고 →
@@ -207,6 +230,11 @@ docker compose -f compose.agent.yml logs -f
 
 오너는 채널에서 에이전트를 멘션해 `!cancel`(현재 턴 취소), `!rotate`(세션 새로 시작),
 `!shutdown`(하네스 종료)을 보낼 수 있습니다.
+
+> **권한 기본값 주의.** `buzz-acp` 의 `BUZZ_ACP_PERMISSION_MODE` 기본값은
+> `bypassPermissions` 입니다. 즉 에이전트가 컨테이너 안에서 파일 수정·쉘 실행을
+> 확인 없이 수행합니다. 작업 공간은 `/workspace` 볼륨으로 격리돼 있고 호스트 파일은
+> 마운트하지 않았지만, 확인 절차를 살리고 싶으면 `agent/.env` 에서 `default` 로 바꾸세요.
 
 ## 8. 운영
 
