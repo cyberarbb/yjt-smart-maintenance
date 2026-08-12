@@ -1,0 +1,51 @@
+# Buzz 에이전트(하네스) 실행용 compose.
+#
+#   cd infra/buzz/agent
+#   cp .env.example .env && $EDITOR .env
+#   docker build -t yjt-buzz-agent:latest .
+#   docker compose -f compose.agent.yml up -d
+#
+# 기본값은 릴레이와 같은 호스트에 붙는 구성이다. 릴레이 compose 프로젝트 이름이
+# `buzz-prod` 이므로 네트워크 실제 이름은 buzz-prod_buzz-net 이고, 그 안에서
+# 릴레이는 `relay` 로 resolve 된다.
+#
+# 릴레이가 다른 서버에 있다면:
+#   - .env 의 BUZZ_RELAY_URL 을 wss://<도메인> 으로 바꾸고
+#   - 아래 networks 블록 두 곳을 주석 처리한다.
+
+name: buzz-agent
+
+services:
+  agent:
+    image: ${AGENT_IMAGE:-yjt-buzz-agent:latest}
+    env_file:
+      - .env
+    environment:
+      # 하네스가 릴레이에 붙을 때 쓰는 에이전트 신원. 반드시 사람 계정과 다른 키.
+      BUZZ_PRIVATE_KEY: ${BUZZ_PRIVATE_KEY:?set BUZZ_PRIVATE_KEY}
+      BUZZ_RELAY_URL: ${BUZZ_RELAY_URL:-ws://relay:3000}
+      # claude-agent-acp 가 Claude 를 호출할 때 쓰는 키.
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:?set ANTHROPIC_API_KEY}
+      BUZZ_ACP_AGENT_COMMAND: ${BUZZ_ACP_AGENT_COMMAND:-claude-agent-acp}
+      # 누구의 발언에 반응할지: owner-only(기본) | allowlist | anyone | nobody
+      BUZZ_ACP_RESPOND_TO: ${BUZZ_ACP_RESPOND_TO:-owner-only}
+      BUZZ_ACP_RESPOND_TO_ALLOWLIST: ${BUZZ_ACP_RESPOND_TO_ALLOWLIST:-}
+      # 동시 처리할 에이전트 서브프로세스 수 (1~32).
+      BUZZ_ACP_AGENTS: ${BUZZ_ACP_AGENTS:-1}
+      # 유휴 시 주기적으로 밀린 작업을 훑게 하려면 초 단위로 설정 (0=비활성).
+      BUZZ_ACP_HEARTBEAT_INTERVAL: ${BUZZ_ACP_HEARTBEAT_INTERVAL:-0}
+      RUST_LOG: ${RUST_LOG:-buzz_acp=info}
+    volumes:
+      # 에이전트 작업 디렉터리(클론한 저장소, 임시 파일 등)를 재시작 후에도 유지.
+      - agent-workspace:/workspace
+    restart: unless-stopped
+    networks:
+      - buzz-net
+
+volumes:
+  agent-workspace:
+
+networks:
+  buzz-net:
+    external: true
+    name: ${BUZZ_NETWORK:-buzz-prod_buzz-net}

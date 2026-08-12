@@ -1,0 +1,4 @@
+# 부트스트랩이 만든 시크릿/상태는 절대 커밋하지 않는다.
+secrets/
+.buzz-env
+agent/.env
