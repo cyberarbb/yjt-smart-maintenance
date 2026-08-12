@@ -1,0 +1,35 @@
+# 신규 기술문의 접수 알림
+#
+# 트리거: YJT 백엔드가 문의 등록 시 POST /hooks/<workflow-id>
+# 본문 예:
+#   {
+#     "inquiry_id": "8f1c...",
+#     "company_name": "OO해운",
+#     "contact_name": "김OO",
+#     "country": "KR",
+#     "vessel_name": "HANARO 7",
+#     "turbo_brand": "MHI",
+#     "turbo_model": "MET42SRC",
+#     "subject": "배기온도 상승 및 서징",
+#     "received_at": "2026-08-12T09:31:00Z"
+#   }
+name: 신규 기술문의 접수
+description: 고객 문의가 등록되면 담당 채널에 접수 카드를 게시합니다.
+trigger:
+  on: webhook
+steps:
+  - id: post_inquiry
+    name: 문의 카드 게시
+    action: send_message
+    text: |
+      📩 **신규 기술문의** — {{trigger.company_name}} ({{trigger.country}})
+
+      · 선박: {{trigger.vessel_name}}
+      · 터보: {{trigger.turbo_brand}} {{trigger.turbo_model}}
+      · 담당자: {{trigger.contact_name}}
+      · 제목: {{trigger.subject}}
+      · 접수: {{trigger.received_at}}
+      · 문의 ID: `{{trigger.inquiry_id}}`
+
+      1차 응답 목표는 영업일 기준 24시간입니다.
+      담당자가 이 메시지에 스레드로 답변 초안을 남겨 주세요.

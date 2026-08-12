@@ -282,9 +282,17 @@ Block 이 Railway 원클릭 배포 템플릿을 제공합니다:
 이 저장소(YJT 스마트 정비 플랫폼)와 Buzz 는 별개 시스템입니다. 굳이 붙인다면:
 
 - **선박/작업지시서 단위 채널** — 정비 건마다 채널을 열고 사진·리포트·승인을 한 로그에 남김
-- **재고 알림 봇** — 안전재고 미만 발생 시 채널에 알림 (릴레이의 webhook/schedule 워크플로 트리거 사용)
+- **재고 알림 봇** — 안전재고 미만 발생 시 채널에 알림
+- **문의 접수 알림 / 정비 만기 다이제스트** — 백엔드와 webhook·schedule 로 연동
 - **기술 문의 1차 응대 에이전트** — 채널에 붙인 Claude 에이전트가 기존 정비 이력·매뉴얼을 근거로 초안 답변, 담당자가 검토 후 발송
 - **감사 추적** — 모든 발언·승인이 서명된 이벤트로 남아 선급/고객 감사 대응에 사용 가능
+
+앞의 3개는 바로 등록할 수 있는 워크플로로 만들어 뒀습니다 → [`workflows/`](workflows/README.md)
+
+```bash
+cd infra/buzz/workflows
+BUZZ_PRIVATE_KEY=<오너 개인키> ./install.sh <채널UUID> --all
+```
 
 다만 Buzz 는 아직 빠르게 움직이는 프로젝트입니다(모바일 클라이언트·워크플로 승인 게이트 등
 일부 기능이 진행 중). 사내 커뮤니케이션 전면 이관보다는 **한 팀·한 프로젝트로 파일럿**을
@@ -298,8 +306,14 @@ infra/buzz/
 ├── bootstrap.sh           소스 클론 + 키/시크릿 생성 + .env 작성
 ├── manage.sh              기동/정지/로그/헬스체크/멤버 관리 래퍼
 ├── .gitignore             secrets/, .buzz-env, agent/.env 커밋 차단
-└── agent/
-    ├── Dockerfile         buzz-cli + buzz-acp 빌드, claude-agent-acp 포함
-    ├── compose.agent.yml  에이전트 하네스 실행 정의
-    └── .env.example       에이전트 설정 템플릿
+├── agent/
+│   ├── Dockerfile         buzz-cli + buzz-acp + buzz-agent 빌드, claude-agent-acp 포함
+│   ├── compose.agent.yml  에이전트 하네스 실행 정의
+│   └── .env.example       에이전트 설정 템플릿
+└── workflows/
+    ├── README.md          워크플로 등록·연동 가이드
+    ├── install.sh         채널에 워크플로 등록
+    ├── low-stock-alert.yml
+    ├── inquiry-received.yml
+    └── daily-pms-digest.yml
 ```

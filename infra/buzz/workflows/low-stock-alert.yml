@@ -1,0 +1,32 @@
+# 안전재고 미만 알림
+#
+# 트리거: YJT 백엔드가 POST /hooks/<workflow-id> 로 호출 (webhook)
+# 본문 예:
+#   {
+#     "part_number": "MAN-TCR18-COMP",
+#     "name": "컴프레서 휠",
+#     "brand": "MAN",
+#     "quantity": "2",
+#     "min_quantity": "5",
+#     "warehouse": "부산창고"
+#   }
+#
+# 본문의 모든 키는 {{trigger.<키>}} 로 참조합니다(값은 문자열로 변환됨).
+# 어떤 항목을 알릴지 판단(재고 < 안전재고)은 백엔드에서 하고, 이 워크플로는
+# 전달받은 내용을 채널에 게시하는 역할만 합니다.
+name: 안전재고 미만 알림
+description: YJT 백엔드가 감지한 재고 부족 부품을 채널에 게시합니다.
+trigger:
+  on: webhook
+steps:
+  - id: post_alert
+    name: 채널에 재고 부족 게시
+    action: send_message
+    text: |
+      ⚠️ **안전재고 미만** — {{trigger.brand}} {{trigger.part_number}}
+
+      · 품명: {{trigger.name}}
+      · 현재고: {{trigger.quantity}} / 안전재고: {{trigger.min_quantity}}
+      · 창고: {{trigger.warehouse}}
+
+      발주 필요 여부를 확인해 주세요.
