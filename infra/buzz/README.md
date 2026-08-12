@@ -131,7 +131,38 @@ Windows 빌드는 코드 서명이 없어 SmartScreen 경고가 뜹니다("추�
 관리자 웹 UI 를 쓰려면 `BUZZ_ADMIN_HOST` 에 별도 호스트명(예: `admin.buzz.yourdomain.com`)을
 지정해야 합니다. 기본 설치에는 포함하지 않았습니다.
 
-## 6. Claude Code 에이전트 연결
+## 6. 모델 인증 — API 키가 꼭 필요한가?
+
+**릴레이(3~5장)까지는 API 키가 전혀 필요 없습니다.** 채널·DM·검색·감사 로그·Git 은
+자체 서버에서 도는 오픈소스라 외부 결제와 무관합니다. AI 에이전트를 붙일 때만
+모델 제공자가 필요하고, 그것도 선택지가 셋입니다.
+
+| | 방식 | 추가 비용 | 비고 |
+|---|---|---|---|
+| **A** | **Claude 구독 재사용** (`claude setup-token` → `CLAUDE_CODE_OAUTH_TOKEN`) | 없음 (기존 Pro/Max/Team 구독 한도 내) | 브라우저 로그인이 안 되는 서버/컨테이너용 1년짜리 OAuth 토큰. Pro/Max/Team/Enterprise 플랜 필요 |
+| **B** | **Anthropic API 키** (`ANTHROPIC_API_KEY`) | 토큰 사용량 과금 | 사용량 통제·팀 분리가 쉬움 |
+| **C** | **로컬 모델** (Ollama/vLLM + `buzz-agent`) | 0원 | 외부로 데이터가 안 나감. 대신 GPU/RAM 필요, 품질은 Claude보다 낮음 |
+| — | **에이전트 없이 사용** | 0원 | 사람끼리 쓰는 자체 호스팅 팀 채팅 + 감사 로그로만 운영 |
+
+A 방식 준비 (노트북에서 한 번만):
+
+```bash
+claude setup-token          # 브라우저 승인 후 토큰이 출력됨 (1년 유효)
+```
+
+출력된 토큰을 `agent/.env` 의 `CLAUDE_CODE_OAUTH_TOKEN` 에 넣고 `ANTHROPIC_API_KEY` 는
+비워 둡니다. 둘 다 넣으면 **API 키가 우선 적용**되어 과금됩니다.
+
+> 이 토큰은 모델 호출 전용이라 Remote Control 세션이나 claude.ai 커넥터는 쓸 수 없습니다.
+> 그리고 저희 쪽 컨테이너에서 실제 기동까지는 검증하지 못했으니, 첫 실행 시
+> `docker compose -f compose.agent.yml logs -f` 로 인증이 통과하는지 꼭 확인하세요.
+> 인증 오류가 나면 B 방식(API 키)으로 전환하면 됩니다.
+
+C 방식은 `agent/.env` 에서 `BUZZ_ACP_AGENT_COMMAND=buzz-agent` 로 바꾸고 Ollama 주소를
+지정합니다(`.env.example` 의 [C] 블록 참고). `buzz-agent` 바이너리는 에이전트 이미지에
+함께 빌드되어 있습니다.
+
+## 7. Claude Code 에이전트 연결
 
 에이전트는 `buzz-acp` 하네스를 통해 붙습니다. 하네스가 릴레이의 @멘션을 듣고 →
 ACP 로 Claude 를 호출하고 → Claude 가 `buzz` CLI 로 답장/작업을 수행합니다.
@@ -151,7 +182,7 @@ cd .. && ./manage.sh add-member <Public key> && cd agent
 
 # 3) 설정
 cp .env.example .env
-$EDITOR .env          # BUZZ_PRIVATE_KEY(=위 Secret key), ANTHROPIC_API_KEY 입력
+$EDITOR .env          # BUZZ_PRIVATE_KEY(=위 Secret key) + 6장에서 고른 모델 인증값
 
 # 4) 이미지 빌드 (Rust 워크스페이스 컴파일 — 15~40분, 최초 1회)
 docker build -t yjt-buzz-agent:latest .
@@ -177,7 +208,7 @@ docker compose -f compose.agent.yml logs -f
 오너는 채널에서 에이전트를 멘션해 `!cancel`(현재 턴 취소), `!rotate`(세션 새로 시작),
 `!shutdown`(하네스 종료)을 보낼 수 있습니다.
 
-## 7. 운영
+## 8. 운영
 
 ```bash
 ./manage.sh upgrade        # 이미지 pull + 재기동 + 백업 체크리스트 출력
@@ -198,7 +229,7 @@ PostgreSQL 스냅샷과 오브젝트/git 스냅샷은 **같은 정지 구간에�
 이미지 태그는 기본이 `ghcr.io/block/buzz:main` 입니다. 운영에 올릴 때는
 `.env` 의 `BUZZ_IMAGE` 를 `:sha-<7자리>` 또는 정식 릴리스 태그로 고정하는 것을 권장합니다.
 
-## 8. 트러블슈팅
+## 9. 트러블슈팅
 
 | 증상 | 확인 |
 |---|---|
@@ -207,9 +238,10 @@ PostgreSQL 스냅샷과 오브젝트/git 스냅샷은 **같은 정지 구간에�
 | HTTPS 인증서 발급 실패 | DNS A 레코드 전파 여부, 80/443 방화벽, `./manage.sh logs caddy` |
 | 클라이언트는 붙는데 아무것도 안 보임 | 해당 공개키가 멤버 명단에 없음 → `./manage.sh list-members` |
 | 에이전트가 멘션에 무반응 | ① 채널 멤버로 추가했는지 ② `BUZZ_ACP_RESPOND_TO` 값 ③ 에이전트 키가 사람 키와 같지 않은지 (자기 이벤트는 무시함) |
+| 에이전트가 인증 오류로 죽음 | 6장의 A/B/C 중 하나만 채웠는지 확인. A(구독 토큰)인데 `ANTHROPIC_API_KEY` 가 남아 있으면 API 키가 우선 적용됨. 토큰 만료 시 `claude setup-token` 재발급 |
 | 에이전트 빌드가 OOM 으로 죽음 | 메모리 4GB 이하 서버에서 흔함. swap 추가 또는 사양 큰 머신에서 빌드 후 이미지 push |
 
-## 9. 서버 없이 먼저 써보려면
+## 10. 서버 없이 먼저 써보려면
 
 Block 이 Railway 원클릭 배포 템플릿을 제공합니다:
 [railway.com/deploy/buzz-relay-block](https://railway.com/deploy/buzz-relay-block)
@@ -217,7 +249,7 @@ Block 이 Railway 원클릭 배포 템플릿을 제공합니다:
 
 검증용으로는 이쪽이 빠르고, 사내 데이터를 태우는 순간부터는 위의 자체 호스팅을 권장합니다.
 
-## 10. YJT 에서 쓸 만한 시나리오
+## 11. YJT 에서 쓸 만한 시나리오
 
 이 저장소(YJT 스마트 정비 플랫폼)와 Buzz 는 별개 시스템입니다. 굳이 붙인다면:
 

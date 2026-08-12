@@ -31,9 +31,12 @@ ARG BUZZ_REF=main
 WORKDIR /build
 RUN git clone --depth 1 --branch "${BUZZ_REF}" https://github.com/block/buzz.git .
 
+# buzz-agent 는 Buzz 자체 ACP 에이전트. Ollama 등 OpenAI 호환 로컬 모델을 붙여
+# 외부 API 없이 돌릴 때 claude-agent-acp 대신 사용한다.
 RUN cargo build --release --locked \
         -p buzz-cli --bin buzz \
-        -p buzz-acp --bin buzz-acp
+        -p buzz-acp --bin buzz-acp \
+        -p buzz-agent --bin buzz-agent
 
 # ─── 2) 런타임 ────────────────────────────────────────────────────────────
 FROM node:${NODE_VERSION}-${DEBIAN_VERSION}-slim AS runtime
@@ -51,8 +54,9 @@ RUN apt-get update \
 # Claude Agent SDK 를 ACP 로 감싸는 어댑터. buzz-acp 가 이 명령을 stdio 로 띄운다.
 RUN npm install -g @agentclientprotocol/claude-agent-acp
 
-COPY --from=builder /build/target/release/buzz     /usr/local/bin/buzz
-COPY --from=builder /build/target/release/buzz-acp /usr/local/bin/buzz-acp
+COPY --from=builder /build/target/release/buzz       /usr/local/bin/buzz
+COPY --from=builder /build/target/release/buzz-acp   /usr/local/bin/buzz-acp
+COPY --from=builder /build/target/release/buzz-agent /usr/local/bin/buzz-agent
 
 RUN useradd --create-home --shell /bin/bash agent \
     && mkdir -p /workspace \

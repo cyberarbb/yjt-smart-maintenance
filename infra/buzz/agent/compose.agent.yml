@@ -24,9 +24,11 @@ services:
       # 하네스가 릴레이에 붙을 때 쓰는 에이전트 신원. 반드시 사람 계정과 다른 키.
       BUZZ_PRIVATE_KEY: ${BUZZ_PRIVATE_KEY:?set BUZZ_PRIVATE_KEY}
       BUZZ_RELAY_URL: ${BUZZ_RELAY_URL:-ws://relay:3000}
-      # claude-agent-acp 가 Claude 를 호출할 때 쓰는 키.
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:?set ANTHROPIC_API_KEY}
+      # 띄울 ACP 에이전트: claude-agent-acp(기본) 또는 buzz-agent
       BUZZ_ACP_AGENT_COMMAND: ${BUZZ_ACP_AGENT_COMMAND:-claude-agent-acp}
+      # 모델 인증값(CLAUDE_CODE_OAUTH_TOKEN / ANTHROPIC_API_KEY / OPENAI_COMPAT_*)은
+      # 여기 나열하지 않고 위 env_file 로만 전달한다. 여기에 적으면 안 쓰는 변수까지
+      # 빈 문자열로 주입되어 인증 우선순위 판정이 꼬일 수 있다.
       # 누구의 발언에 반응할지: owner-only(기본) | allowlist | anyone | nobody
       BUZZ_ACP_RESPOND_TO: ${BUZZ_ACP_RESPOND_TO:-owner-only}
       BUZZ_ACP_RESPOND_TO_ALLOWLIST: ${BUZZ_ACP_RESPOND_TO_ALLOWLIST:-}

@@ -211,7 +211,7 @@ cat <<MSG
   1) 기동          : ./manage.sh start
   2) 상태 확인     : ./manage.sh status  /  ./manage.sh health
   3) 팀원 추가     : ./manage.sh add-member <npub 또는 64자리 hex>
-  4) 에이전트 연결 : agent/README 절차 (infra/buzz/README.md 6장)
+  4) 에이전트 연결 : agent/README 절차 (infra/buzz/README.md 6~7장)
 MSG
 
 if [[ "${MODE}" == "tls" ]]; then
