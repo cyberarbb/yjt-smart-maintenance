@@ -265,6 +265,8 @@ PostgreSQL 스냅샷과 오브젝트/git 스냅샷은 **같은 정지 구간에�
 | 릴레이가 계속 재시작 | `./manage.sh logs relay` — 대개 DB 마이그레이션(`BUZZ_AUTO_MIGRATE=true` 확인) 또는 시크릿 누락 |
 | HTTPS 인증서 발급 실패 | DNS A 레코드 전파 여부, 80/443 방화벽, `./manage.sh logs caddy` |
 | 클라이언트는 붙는데 아무것도 안 보임 | 해당 공개키가 멤버 명단에 없음 → `./manage.sh list-members` |
+| `relay: no community is configured for this host` | 접속에 쓴 **호스트명이 `.env` 의 `RELAY_URL` 과 다름**. 릴레이는 요청의 Host 헤더로 커뮤니티를 찾습니다. IP(`http://1.2.3.4:3000`)나 다른 별칭으로 붙으면 404가 납니다 — 반드시 부트스트랩에 준 도메인으로 접속하세요 |
+| 기동 직후 `git conformance probe failed: s3 backend error` 로 종료 | S3(MinIO)에 닿지 못하는 상태. compose 스택은 minio 가 healthy 된 뒤 릴레이를 띄우므로 보통 정상이지만, 외부 S3 를 쓰거나 자격증명이 틀리면 발생합니다. 원인 조사 중 임시로 넘기려면 `BUZZ_GIT_CONFORMANCE_PROBE=false` (운영 복구 후 되돌리세요) |
 | 에이전트가 멘션에 무반응 | ① 채널 멤버로 추가했는지 ② `BUZZ_ACP_RESPOND_TO` 값 ③ 에이전트 키가 사람 키와 같지 않은지 (자기 이벤트는 무시함) |
 | 에이전트가 인증 오류로 죽음 | 6장의 A/B/C 중 하나만 채웠는지 확인. A(구독 토큰)인데 `ANTHROPIC_API_KEY` 가 남아 있으면 API 키가 우선 적용됨. 토큰 만료 시 `claude setup-token` 재발급 |
 | 에이전트 빌드가 OOM 으로 죽음 | 메모리 4GB 이하 서버에서 흔함. swap 추가 또는 사양 큰 머신에서 빌드 후 이미지 push |
@@ -297,6 +299,31 @@ BUZZ_PRIVATE_KEY=<오너 개인키> ./install.sh <채널UUID> --all
 다만 Buzz 는 아직 빠르게 움직이는 프로젝트입니다(모바일 클라이언트·워크플로 승인 게이트 등
 일부 기능이 진행 중). 사내 커뮤니케이션 전면 이관보다는 **한 팀·한 프로젝트로 파일럿**을
 먼저 돌려보길 권합니다.
+
+## 12. 어디까지 검증했는지
+
+정직하게 남깁니다. 작성 환경에서는 컨테이너 레지스트리(ghcr.io / Docker Hub)가
+막혀 있어 이미지를 받을 수 없었습니다. 그래서 릴레이·CLI 를 **소스에서 직접 빌드해
+같은 설정값으로 띄워** 아래까지 실제로 확인했습니다.
+
+| 항목 | 결과 |
+|---|---|
+| DB 마이그레이션 (`buzz-admin migrate`) | ✅ PostgreSQL 16에서 완료 |
+| 릴레이 기동 + 오너 부트스트랩 + Redis/검색 초기화 | ✅ |
+| `/_liveness`, `/_readiness` | ✅ `ok`, `{"status":"ready"}` |
+| 멤버 등록·조회 (`add-member` / `list-members`) | ✅ owner/admin/member 역할 반영 |
+| 채널 생성 + 메시지 전송/조회 | ✅ |
+| 워크플로 3종 등록 | ✅ webhook 트리거 2종은 `webhook_secret` 발급 확인 |
+| webhook 실행 (`POST /hooks/<id>`) → 채널 게시 | ✅ 템플릿 치환까지 정상 |
+| 잘못된 시크릿 거부 | ✅ HTTP 401 |
+
+**검증하지 못한 부분** — 사장님 서버에서 확인이 필요합니다.
+
+- 도커 이미지 기반 기동(`manage.sh start`) 자체와 Caddy TLS 인증서 자동 발급
+- MinIO(S3) 연동 — 미디어 업로드와 git 오브젝트 저장. 이 환경에선 MinIO 바이너리도
+  받을 수 없어 `BUZZ_GIT_CONFORMANCE_PROBE` 를 끄고 검증했습니다
+- 에이전트 이미지 빌드와 Claude 연결(6~7장)
+- `schedule` 트리거의 실제 발화 (cron 대기 필요)
 
 ## 파일 구성
 

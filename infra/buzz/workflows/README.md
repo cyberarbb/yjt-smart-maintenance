@@ -13,6 +13,27 @@ YJT 업무에 바로 붙는 3개를 준비했습니다.
 통과시켰고, `daily-pms-digest.yml` 의 조건식은 evalexpr 로 200/500 두 경우를
 평가해 확인했습니다.
 
+여기에 더해 **소스 빌드한 릴레이에 실제로 등록해 돌려봤습니다**:
+
+- 세 정의 모두 등록 성공, webhook 트리거 2종은 `webhook_secret` 발급 확인
+  (`schedule` 트리거인 다이제스트에는 시크릿이 나오지 않습니다 — 정상)
+- `low-stock-alert` 에 실제 POST → 채널에 아래 메시지가 게시됨(템플릿 치환 정상):
+
+  ```
+  ⚠️ **안전재고 미만** — MAN MAN-TCR18-COMP
+
+  · 품명: 컴프레서 휠
+  · 현재고: 2 / 안전재고: 5
+  · 창고: 부산창고
+  ```
+
+- 잘못된 시크릿으로 호출 시 **HTTP 401** 로 거부
+- 정상 호출 응답: `{"run_id":"...","status":"pending","workflow_id":"..."}`
+
+> **주의.** webhook 호출과 CLI 접속은 모두 `.env` 의 `RELAY_URL` 과 **같은 호스트명**을
+> 써야 합니다. 릴레이가 Host 헤더로 커뮤니티를 식별하기 때문에 IP 로 붙으면
+> `no community is configured for this host` (404) 가 납니다.
+
 ## 등록
 
 ```bash
