@@ -104,10 +104,44 @@ async def notify_low_stock(item) -> None:
 - 리다이렉트는 따라가지 않고, 응답 본문에는 크기 상한이 있습니다. 백엔드가 사람이
   읽을 텍스트를 짧게 만들어 돌려주는 형태가 가장 잘 맞습니다.
 
-`daily-pms-digest.yml` 은 `YOUR-BACKEND-DOMAIN` 과 `REPLACE_WITH_BACKEND_TOKEN`
-자리표시자를 쓰고 있으니 등록 전에 실제 값으로 바꾸세요. 백엔드에
-`/api/maintenance/due-digest` 엔드포인트는 아직 없습니다 — 이 워크플로가 기대하는
-계약(GET → 사람이 읽는 텍스트 응답)에 맞춰 추가하시면 됩니다.
+`daily-pms-digest.yml` 은 `YOUR-BACKEND-DOMAIN` 과 `REPLACE_WITH_PMS_DIGEST_API_KEY`
+자리표시자를 쓰고 있으니 등록 전에 실제 값으로 바꾸세요.
+
+### 백엔드 엔드포인트 (구현 완료)
+
+이 워크플로가 호출하는 `GET /api/pms/due-digest` 는 백엔드에 구현돼 있습니다.
+
+| 항목 | 값 |
+|---|---|
+| 경로 | `GET /api/pms/due-digest` (PMS 라우터가 `/api/pms` 에 마운트됨) |
+| 인증 | `X-Api-Key` 헤더 ↔ 환경변수 `PMS_DIGEST_API_KEY` |
+| 응답 | `text/plain` — 사람이 읽는 요약 (그대로 채널에 게시됨) |
+| 파라미터 | `days`(1~90, 기본 7), `limit`(1~50, 기본 10), `vessel_id`(선택) |
+
+키가 설정돼 있지 않으면 엔드포인트가 **503** 으로 비활성화됩니다(인증 없이 정비 현황이
+열리는 것을 막기 위함). Render 배포는 `render.yaml` 에서 `PMS_DIGEST_API_KEY` 를
+자동 생성하도록 해뒀으니, 대시보드에서 값을 복사해 워크플로에 넣으면 됩니다.
+
+응답 예:
+
+```
+기준 시각: 2026-08-13 06:09 (KST)
+
+■ 기한 초과 2건
+· [HANARO 7] TC-001 주기관 터보차저 — 터보차저 분해정비 / 12일 초과 (기한 08-01) [선급]
+· [HANARO 7] TC-001 주기관 터보차저 — 노즐링 교환 / 3일 초과 (기한 08-10)
+
+■ 향후 7일 예정 1건
+· [HANARO 7] TC-001 주기관 터보차저 — 윤활유 샘플 채취 / 예정 08-16 / 기한 08-18
+
+■ 현황: 총 5건 / 완료 1건 (20.0%) / 진행 1건 / 초과 2건
+```
+
+동작 확인:
+
+```bash
+curl -H "X-Api-Key: $PMS_DIGEST_API_KEY" https://<백엔드도메인>/api/pms/due-digest
+```
 
 ## 사용 가능한 트리거·액션 (참고)
 

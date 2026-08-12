@@ -33,6 +33,8 @@ services:
         sync: false  # 프론트엔드 배포 후 URL 입력
       - key: EXTRA_CORS_ORIGINS
         sync: false
+      - key: PMS_DIGEST_API_KEY
+        generateValue: true  # /api/pms/due-digest 호출용 키 (Buzz 워크플로에 붙여넣기)
       - key: PYTHON_VERSION
         value: "3.11.11"
 

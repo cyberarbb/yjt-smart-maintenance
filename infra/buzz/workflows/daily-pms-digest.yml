@@ -22,10 +22,10 @@ steps:
     name: YJT 백엔드에서 만기 목록 조회
     timeout_secs: 30
     action: call_webhook
-    url: https://YOUR-BACKEND-DOMAIN/api/maintenance/due-digest
+    url: https://YOUR-BACKEND-DOMAIN/api/pms/due-digest
     method: GET
     headers:
-      X-Api-Key: REPLACE_WITH_BACKEND_TOKEN
+      X-Api-Key: REPLACE_WITH_PMS_DIGEST_API_KEY
 
   - id: post_digest
     name: 다이제스트 게시

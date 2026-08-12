@@ -38,6 +38,10 @@ class Settings(BaseSettings):
     # CORS
     frontend_url: str = "http://localhost:3000"
 
+    # PMS 다이제스트 API 키 (Buzz 워크플로 등 외부 시스템이 호출할 때 사용)
+    # 비워 두면 /api/pms/due-digest 엔드포인트가 비활성(503)된다.
+    pms_digest_api_key: str = ""
+
     # Server (Uvicorn) - CLOSE_WAIT 방지
     uvicorn_host: str = "0.0.0.0"
     uvicorn_port: int = 8000

@@ -1,7 +1,10 @@
 """정비 계획(Maintenance Plan) + 작업지시서(Work Order) 라우터"""
+import secrets
 from datetime import datetime
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Header, HTTPException, Query
+from fastapi.responses import PlainTextResponse
 from sqlalchemy.orm import Session
+from app.config import get_settings
 from app.database import get_db
 from app.models.user import User
 from app.models.equipment import Equipment
@@ -14,9 +17,27 @@ from app.services.pms_service import (
     get_upcoming_work_orders,
     get_pms_stats,
     get_calendar_data,
+    build_due_digest,
 )
 
 router = APIRouter()
+
+
+def verify_digest_api_key(x_api_key: str | None = Header(default=None)) -> None:
+    """다이제스트 전용 API 키 검증.
+
+    JWT 로그인이 없는 외부 시스템(Buzz 워크플로 등)이 호출하는 경로라서
+    별도 키를 쓴다. 키가 설정되지 않았으면 엔드포인트 자체를 막는다
+    (인증 없이 정비 현황이 열리는 상황을 방지).
+    """
+    expected = get_settings().pms_digest_api_key
+    if not expected:
+        raise HTTPException(
+            status_code=503,
+            detail="Digest endpoint is disabled: PMS_DIGEST_API_KEY is not configured",
+        )
+    if not x_api_key or not secrets.compare_digest(x_api_key, expected):
+        raise HTTPException(status_code=401, detail="Invalid or missing X-Api-Key")
 
 
 # ── Maintenance Plans ──────────────────────────────────
@@ -239,6 +260,26 @@ def update_work_order(
     db.commit()
     db.refresh(wo)
     return _wo_to_dict(wo, db)
+
+
+# ── Due Digest (외부 알림용) ─────────────────────────────
+
+@router.get("/due-digest", response_class=PlainTextResponse)
+def get_due_digest(
+    vessel_id: str | None = None,
+    days: int = Query(default=7, ge=1, le=90),
+    limit: int = Query(default=10, ge=1, le=50),
+    _: None = Depends(verify_digest_api_key),
+    db: Session = Depends(get_db),
+):
+    """정비 만기 다이제스트 (평문).
+
+    Buzz 워크플로(`daily-pms-digest`)가 매일 아침 호출해서 응답 본문을 그대로
+    채널에 게시한다. 그래서 JSON 이 아니라 사람이 읽는 텍스트를 반환한다.
+
+    인증: `X-Api-Key` 헤더 (JWT 아님). `PMS_DIGEST_API_KEY` 환경변수와 비교한다.
+    """
+    return build_due_digest(db, vessel_id=vessel_id, days=days, limit=limit)
 
 
 # ── Helpers ─────────────────────────────────────────────
